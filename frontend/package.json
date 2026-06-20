@@ -72,7 +72,7 @@
   },
   "scripts": {
     "start": "craco start",
-    "build": "cross-env CI=false craco build",
+    "build": "cross-env CI=false GENERATE_SOURCEMAP=false craco build",
     "test": "craco test"
   },
   "browserslist": {
