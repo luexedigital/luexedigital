@@ -24,18 +24,26 @@ export default function App() {
 
   useLenis(perf.reducedMotion);
 
-  // Global mouse tracking for spotlight effect on cards
+  // Global mouse tracking for spotlight effect on cards (Optimized)
   useEffect(() => {
     if (perf.reducedMotion) return;
+    let ticking = false;
+
     const handleMouseMove = (e) => {
-      const cards = document.querySelectorAll(".card-luxe");
-      for (const card of cards) {
-        const rect = card.getBoundingClientRect();
-        card.style.setProperty("--mouse-x", `${e.clientX - rect.left}px`);
-        card.style.setProperty("--mouse-y", `${e.clientY - rect.top}px`);
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const card = e.target.closest(".card-luxe");
+          if (card) {
+            const rect = card.getBoundingClientRect();
+            card.style.setProperty("--mouse-x", `${e.clientX - rect.left}px`);
+            card.style.setProperty("--mouse-y", `${e.clientY - rect.top}px`);
+          }
+          ticking = false;
+        });
+        ticking = true;
       }
     };
-    window.addEventListener("mousemove", handleMouseMove);
+    window.addEventListener("mousemove", handleMouseMove, { passive: true });
     return () => window.removeEventListener("mousemove", handleMouseMove);
   }, [perf.reducedMotion]);
 

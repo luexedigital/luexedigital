@@ -7,15 +7,22 @@ export default function InteractiveGrid({ className = "" }) {
     const container = containerRef.current;
     if (!container) return;
 
+    let ticking = false;
     const handleMouseMove = (e) => {
-      const rect = container.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-      container.style.setProperty("--x", `${x}px`);
-      container.style.setProperty("--y", `${y}px`);
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const rect = container.getBoundingClientRect();
+          const x = e.clientX - rect.left;
+          const y = e.clientY - rect.top;
+          container.style.setProperty("--x", `${x}px`);
+          container.style.setProperty("--y", `${y}px`);
+          ticking = false;
+        });
+        ticking = true;
+      }
     };
 
-    window.addEventListener("mousemove", handleMouseMove);
+    window.addEventListener("mousemove", handleMouseMove, { passive: true });
     return () => window.removeEventListener("mousemove", handleMouseMove);
   }, []);
 
