@@ -3,6 +3,10 @@ import { Canvas, useFrame } from "@react-three/fiber";
 import { Environment, Lightformer, Float, useTexture } from "@react-three/drei";
 import { EffectComposer, Bloom } from "@react-three/postprocessing";
 import * as THREE from "three";
+import gsap from "gsap";
+import ScrollTrigger from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 const MARK_URL = "/luexe-mark.png";
 useTexture.preload(MARK_URL);
@@ -12,6 +16,7 @@ useTexture.preload(MARK_URL);
    glass shards and volumetric lighting provide the cinematic 3D depth. */
 function LogoMark3D({ pointer }) {
   const ref = useRef();
+  const matRef = useRef();
   const tex = useTexture(MARK_URL);
   tex.colorSpace = THREE.SRGBColorSpace;
   tex.anisotropy = 8;
@@ -19,6 +24,23 @@ function LogoMark3D({ pointer }) {
   const aspect = tex.image ? tex.image.width / tex.image.height : 1;
   const h = 4.4;
   const w = h * aspect;
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      // Slightly fade the logo as you scroll down so text below is readable
+      gsap.to(matRef.current, {
+        opacity: 0.15,
+        ease: "none",
+        scrollTrigger: {
+          trigger: "#top",
+          start: "10% top",
+          end: "100% top",
+          scrub: true,
+        }
+      });
+    });
+    return () => ctx.revert();
+  }, []);
 
   useFrame((state) => {
     const g = ref.current;
@@ -36,6 +58,7 @@ function LogoMark3D({ pointer }) {
         <mesh>
           <planeGeometry args={[w, h]} />
           <meshBasicMaterial
+            ref={matRef}
             map={tex}
             transparent
             depthWrite={false}
@@ -119,6 +142,7 @@ function Shards({ count }) {
               transparent
               opacity={0.5}
               envMapIntensity={2.4}
+              depthWrite={false}
             />
           </mesh>
         </Float>
