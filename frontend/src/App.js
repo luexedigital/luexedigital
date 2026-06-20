@@ -32,6 +32,11 @@ export default function App() {
   // Global mouse tracking for spot lighting
   useEffect(() => {
     if (perf.reducedMotion || typeof window === "undefined") return;
+    
+    // Completely disable global JS mouse tracking on mobile to save battery and reduce lag
+    const isMobile = window.matchMedia("(max-width: 768px)").matches;
+    if (isMobile) return;
+
     let ticking = false;
 
     const handleMouseMove = (e) => {
