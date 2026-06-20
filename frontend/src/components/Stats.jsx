@@ -1,15 +1,17 @@
 import React, { useEffect, useRef, useState } from "react";
 import { motion, useInView } from "framer-motion";
-import { STATS } from "@/lib/data";
 
 function CountUp({ target, prefix = "", suffix = "", inView }) {
   const [val, setVal] = useState(0);
   const isInt = Number.isInteger(target);
 
   useEffect(() => {
-    if (!inView) return undefined;
+    if (!inView || typeof target !== "number") {
+      if (typeof target !== "number") setVal(target);
+      return undefined;
+    }
     let raf;
-    const duration = 1700;
+    const duration = 2000;
     const start = performance.now();
     const tick = (now) => {
       const p = Math.min(1, Math.max(0, (now - start) / duration));
@@ -21,6 +23,10 @@ function CountUp({ target, prefix = "", suffix = "", inView }) {
     return () => cancelAnimationFrame(raf);
   }, [inView, target]);
 
+  if (typeof target !== "number") {
+    return <span>{prefix}{target}{suffix}</span>;
+  }
+
   const display = isInt ? Math.round(val) : val.toFixed(1);
   return (
     <span>
@@ -31,6 +37,13 @@ function CountUp({ target, prefix = "", suffix = "", inView }) {
   );
 }
 
+const METRICS = [
+  { value: 100, suffix: "+", label: "High-Converting Pages Built", sub: "Engineered for maximum ROI" },
+  { value: "Thousands", label: "of Leads Generated", sub: "Driving real business growth" },
+  { value: "100%", label: "Performance-Driven", sub: "Every decision backed by data" },
+  { value: "GCC", label: "Market Expertise", sub: "Deep understanding of local behavior" },
+];
+
 export default function Stats() {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
@@ -38,20 +51,20 @@ export default function Stats() {
   return (
     <section
       data-testid="stats-section"
-      className="relative border-y border-white/5 bg-graphite/40 py-20 md:py-24"
+      className="relative py-24 md:py-32"
     >
-      <div ref={ref} className="mx-auto max-w-7xl px-6 md:px-12">
-        <div className="grid grid-cols-2 gap-x-6 gap-y-12 md:grid-cols-4">
-          {STATS.map((s, i) => (
+      <div ref={ref} className="mx-auto max-w-7xl px-6 md:px-12 relative z-10">
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          {METRICS.map((s, i) => (
             <motion.div
               key={s.label}
-              initial={{ opacity: 0, y: 28 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
+              initial={{ opacity: 0, y: 30, scale: 0.95 }}
+              animate={inView ? { opacity: 1, y: 0, scale: 1 } : {}}
               transition={{ duration: 0.7, delay: i * 0.1, ease: [0.22, 1, 0.36, 1] }}
-              className="relative"
+              className="card-luxe glass-strong p-8 flex flex-col justify-center items-center text-center group"
               data-testid={`stat-${i}`}
             >
-              <div className="font-heading text-4xl font-bold tracking-tighter text-softwhite md:text-6xl">
+              <div className="font-heading text-4xl font-bold tracking-tighter text-softwhite md:text-5xl mb-2">
                 <span className="text-gradient-cyan">
                   <CountUp
                     target={s.value}
@@ -61,10 +74,12 @@ export default function Stats() {
                   />
                 </span>
               </div>
-              <p className="mt-3 font-body text-sm font-medium text-softwhite md:text-base">
+              <p className="font-body text-base font-semibold text-softwhite group-hover:text-electric transition-colors">
                 {s.label}
               </p>
-              <p className="mt-1 font-body text-xs text-smoke">{s.sub}</p>
+              <p className="mt-2 font-body text-xs text-smoke">
+                {s.sub}
+              </p>
             </motion.div>
           ))}
         </div>

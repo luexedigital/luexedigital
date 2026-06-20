@@ -26,7 +26,7 @@ export default function Hero({ perf, started }) {
 
       {/* 3D canvas (lazy) */}
       {showCanvas && (
-        <div className="absolute inset-0 z-0">
+        <div className="fixed inset-0 z-0 pointer-events-none">
           <Suspense fallback={null}>
             <HeroScene config={perf.scene} />
           </Suspense>
@@ -54,15 +54,15 @@ export default function Hero({ perf, started }) {
             transition={{ duration: 0.8, delay: 0.4, ease: EASE }}
             className="eyebrow mb-6"
           >
-            Premium Growth Partner · Kuwait & the GCC
+            Premium Websites & Performance Marketing for Businesses Ready to Scale
           </motion.p>
 
           <h1 className="font-heading text-5xl font-bold leading-[0.95] tracking-tighter text-softwhite sm:text-6xl lg:text-8xl">
             <span className="block overflow-hidden">
               <motion.span
                 className="block"
-                initial={{ y: "110%" }}
-                animate={{ y: 0 }}
+                initial={{ y: "110%", filter: "blur(10px)" }}
+                animate={{ y: 0, filter: "blur(0px)" }}
                 transition={{ duration: 0.9, delay: 0.45, ease: EASE }}
               >
                 Luexe
@@ -71,8 +71,8 @@ export default function Hero({ perf, started }) {
             <span className="block overflow-hidden">
               <motion.span
                 className="text-gradient block"
-                initial={{ y: "110%" }}
-                animate={{ y: 0 }}
+                initial={{ y: "110%", filter: "blur(10px)" }}
+                animate={{ y: 0, filter: "blur(0px)" }}
                 transition={{ duration: 0.9, delay: 0.55, ease: EASE }}
               >
                 Digital
@@ -81,18 +81,17 @@ export default function Hero({ perf, started }) {
           </h1>
 
           <motion.p
-            initial={{ opacity: 0, y: 18 }}
-            animate={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, y: 18, filter: "blur(10px)" }}
+            animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
             transition={{ duration: 0.8, delay: 0.75, ease: EASE }}
             className="mt-7 max-w-xl font-body text-lg text-smoke md:text-xl"
           >
-            Building digital experiences that drive growth — high-converting
-            websites, performance marketing and brands engineered to win.
+            We build high-converting websites and growth systems that generate leads and elevate brands across Kuwait and the GCC.
           </motion.p>
 
           <motion.div
-            initial={{ opacity: 0, y: 18 }}
-            animate={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, y: 18, filter: "blur(10px)" }}
+            animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
             transition={{ duration: 0.8, delay: 0.9, ease: EASE }}
             className="mt-6 flex flex-wrap gap-x-3 gap-y-2 font-body text-xs uppercase tracking-[0.18em] text-smoke/80"
           >
@@ -111,8 +110,8 @@ export default function Hero({ perf, started }) {
           </motion.div>
 
           <motion.div
-            initial={{ opacity: 0, y: 18 }}
-            animate={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, y: 18, filter: "blur(10px)" }}
+            animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
             transition={{ duration: 0.8, delay: 1.05, ease: EASE }}
             className="pointer-events-auto mt-10 flex flex-wrap items-center gap-4"
           >

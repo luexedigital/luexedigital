@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Suspense, lazy } from "react";
+import { AnimatePresence } from "framer-motion";
 import "@/App.css";
 import { usePerformanceTier } from "@/hooks/usePerformanceTier";
 import { useLenis } from "@/hooks/useLenis";
@@ -10,13 +11,15 @@ import Stats from "@/components/Stats";
 import Services from "@/components/Services";
 import Process from "@/components/Process";
 import Industries from "@/components/Industries";
-import Portfolio from "@/components/Portfolio";
+import CaseStudies from "@/components/CaseStudies";
 import WhyUs from "@/components/WhyUs";
 import Testimonials from "@/components/Testimonials";
 import FinalCTA from "@/components/FinalCTA";
 import Footer from "@/components/Footer";
 import LaserScroll from "@/components/LaserScroll";
 import SEO from "@/components/SEO";
+
+const GlobalBackground = lazy(() => import("@/three/GlobalBackground"));
 
 export default function App() {
   const perf = usePerformanceTier();
@@ -50,26 +53,37 @@ export default function App() {
   return (
     <div className="App grain bg-midnight font-body text-softwhite">
       <SEO />
+      
+      {!perf.reducedMotion && (
+        <Suspense fallback={null}>
+          <GlobalBackground config={perf.scene} />
+        </Suspense>
+      )}
+
       <Cursor disabled={perf.tier === "low" || perf.reducedMotion} />
       <LaserScroll />
 
-      {!loaded && <Loader onComplete={() => setLoaded(true)} />}
-
-      <Navbar />
-
-      <main>
-        <Hero perf={perf} started={loaded} />
-        <Stats />
-        <Services />
-        <Process />
-        <Industries />
-        <Portfolio />
-        <WhyUs />
-        <Testimonials />
-        <FinalCTA />
-      </main>
-
-      <Footer />
+      <AnimatePresence mode="wait">
+        {!loaded ? (
+          <Loader key="loader" onComplete={() => setLoaded(true)} />
+        ) : (
+          <div key="content" className="relative z-10">
+            <Navbar />
+            <main>
+              <Hero perf={perf} started={loaded} />
+              <Stats />
+              <Services />
+              <Process />
+              <Industries />
+              <CaseStudies />
+              <WhyUs />
+              <Testimonials />
+              <FinalCTA />
+            </main>
+            <Footer />
+          </div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

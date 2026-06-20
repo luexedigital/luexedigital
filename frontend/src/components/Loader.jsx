@@ -1,27 +1,38 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import gsap from "gsap";
 import LogoMark from "@/components/LogoMark";
 
-/**
- * Premium loading screen. GSAP-driven 0 → 100 counter, progress hairline,
- * then ascends out of view and signals completion.
- */
 export default function Loader({ onComplete }) {
-  const [count, setCount] = useState(0);
   const [exiting, setExiting] = useState(false);
-  const obj = useRef({ v: 0 });
 
   useEffect(() => {
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const tl = gsap.timeline();
-    tl.to(obj.current, {
-      v: 100,
-      duration: reduce ? 0.6 : 2.1,
-      ease: "power2.inOut",
-      onUpdate: () => setCount(Math.round(obj.current.v)),
+    if (reduce) {
+      setTimeout(() => setExiting(true), 500);
+      return;
+    }
+
+    const tl = gsap.timeline({
       onComplete: () => setExiting(true),
     });
+
+    // 1. Single cyan particle appears
+    tl.fromTo(".particle-core", { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.3, ease: "back.out(1.5)" });
+    
+    // 2. Particle multiplies (simulated by splitting out rings/dots)
+    tl.to(".particle-split", { scale: 1.5, opacity: 0.5, duration: 0.4, stagger: 0.1, ease: "power2.out" }, "-=0.1");
+    
+    // 3. Assemble: L + D Monogram
+    tl.to(".particle-container", { scale: 0.1, opacity: 0, duration: 0.3, ease: "power3.in" }, "+=0.1");
+    tl.fromTo(".loader-logo", { scale: 0.8, opacity: 0, filter: "blur(10px)" }, { scale: 1, opacity: 1, filter: "blur(0px)", duration: 0.5, ease: "power2.out" }, "-=0.1");
+    
+    // 4. LUEXE DIGITAL appears
+    tl.fromTo(".loader-text", { y: 10, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, ease: "power2.out" }, "-=0.2");
+    
+    // Wait briefly before exiting
+    tl.to({}, { duration: 0.3 });
+
     return () => tl.kill();
   }, []);
 
@@ -29,45 +40,30 @@ export default function Loader({ onComplete }) {
     <motion.div
       data-testid="loader-screen"
       className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-midnight"
-      initial={{ y: 0 }}
-      animate={exiting ? { y: "-100%" } : { y: 0 }}
-      transition={{ duration: 1, ease: [0.76, 0, 0.24, 1], delay: exiting ? 0.25 : 0 }}
+      initial={{ opacity: 1 }}
+      animate={exiting ? { opacity: 0 } : { opacity: 1 }}
+      transition={{ duration: 0.8, ease: "easeInOut" }}
       onAnimationComplete={() => exiting && onComplete?.()}
     >
-      {/* ambient glows */}
-      <div className="pointer-events-none absolute left-1/2 top-1/2 h-[460px] w-[460px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-royal/20 blur-[120px]" />
-
-      <motion.div
-        initial={{ opacity: 0, scale: 0.9 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-        className="relative z-10 flex flex-col items-center gap-6"
-      >
-        <div className="animate-glow-pulse">
-          <LogoMark size={72} />
+      <div className="relative flex flex-col items-center justify-center h-40">
+        
+        {/* The initial particle system */}
+        <div className="particle-container absolute inset-0 flex items-center justify-center">
+          <div className="particle-split absolute w-4 h-4 rounded-full bg-electric blur-[2px]" style={{ transform: 'translate(-20px, -20px)' }} />
+          <div className="particle-split absolute w-4 h-4 rounded-full bg-royal blur-[2px]" style={{ transform: 'translate(20px, 20px)' }} />
+          <div className="particle-split absolute w-4 h-4 rounded-full bg-electric blur-[2px]" style={{ transform: 'translate(-20px, 20px)' }} />
+          <div className="particle-split absolute w-4 h-4 rounded-full bg-royal blur-[2px]" style={{ transform: 'translate(20px, -20px)' }} />
+          <div className="particle-core relative z-10 w-3 h-3 rounded-full bg-[#00E5FF] shadow-[0_0_20px_#00E5FF]" />
         </div>
-        <p className="eyebrow">Luexe Digital</p>
-      </motion.div>
 
-      {/* bottom row: progress */}
-      <div className="absolute bottom-10 left-0 right-0 px-6 md:px-12">
-        <div className="mx-auto flex max-w-7xl items-end justify-between">
-          <span className="font-body text-xs uppercase tracking-[0.25em] text-smoke">
-            Crafting your experience
-          </span>
-          <span
-            data-testid="loader-counter"
-            className="font-heading text-5xl font-bold tracking-tighter text-softwhite md:text-7xl"
-          >
-            {count}
-            <span className="text-electric">%</span>
-          </span>
-        </div>
-        <div className="mx-auto mt-5 h-px max-w-7xl overflow-hidden bg-white/10">
-          <div
-            className="h-full bg-gradient-to-r from-royal to-electric transition-[width] duration-150 ease-out"
-            style={{ width: `${count}%` }}
-          />
+        {/* The assembled logo */}
+        <div className="loader-logo opacity-0 absolute inset-0 flex flex-col items-center justify-center">
+          <div className="animate-glow-pulse mb-6">
+            <LogoMark size={72} />
+          </div>
+          <p className="loader-text font-heading text-lg tracking-[0.25em] text-softwhite uppercase mt-4">
+            Luexe Digital
+          </p>
         </div>
       </div>
     </motion.div>

@@ -95,40 +95,37 @@ export const INDUSTRIES = [
   { icon: UtensilsCrossed, name: "Food & Beverage" },
 ];
 
-export const PORTFOLIO = [
+export const CASE_STUDIES = [
   {
-    name: "Skyline Properties",
-    sector: "Real Estate · Kuwait",
-    result: "+180% Qualified Leads",
-    desc: "A premium property brand reimagined — immersive listings and a lead engine that filled the sales pipeline within weeks.",
-    image:
-      "https://images.pexels.com/photos/15744089/pexels-photo-15744089.jpeg",
+    name: "Website Transformation",
+    sector: "Tech · GCC",
+    result: "Complete Re-platforming",
+    desc: "A cinematic brand refresh and conversion-first booking experience that reduced dependence on third-party platforms.",
+    image: "https://images.pexels.com/photos/1714341/pexels-photo-1714341.jpeg",
     metrics: [
-      { k: "Leads", v: "+180%" },
+      { k: "Conversion Increase", v: "+220%" },
+      { k: "Load Time", v: "-40%" },
+    ],
+  },
+  {
+    name: "Lead Generation Campaign",
+    sector: "Real Estate · Kuwait",
+    result: "Hyper-Targeted Acquisition",
+    desc: "Full-funnel performance marketing that turned browsers into a loyal, repeat customer base.",
+    image: "https://images.pexels.com/photos/27141316/pexels-photo-27141316.jpeg",
+    metrics: [
+      { k: "Leads Generated", v: "14,500+" },
       { k: "CPL", v: "-46%" },
     ],
   },
   {
-    name: "Aurum Commerce",
-    sector: "E-Commerce · GCC",
-    result: "5.4x Return on Ad Spend",
-    desc: "Full-funnel performance marketing and a re-platformed storefront that turned browsers into a loyal, repeat customer base.",
-    image:
-      "https://images.pexels.com/photos/27141316/pexels-photo-27141316.jpeg",
+    name: "Brand Growth Project",
+    sector: "E-Commerce · Global",
+    result: "Market Expansion",
+    desc: "Identity systems, art direction and motion that make ambitious brands impossible to ignore.",
+    image: "https://images.pexels.com/photos/8068660/pexels-photo-8068660.jpeg",
     metrics: [
-      { k: "ROAS", v: "5.4x" },
-      { k: "AOV", v: "+32%" },
-    ],
-  },
-  {
-    name: "Meridian Hospitality",
-    sector: "Hospitality · GCC",
-    result: "+220% Direct Bookings",
-    desc: "A cinematic brand refresh and conversion-first booking experience that reduced dependence on third-party platforms.",
-    image:
-      "https://images.pexels.com/photos/8068660/pexels-photo-8068660.jpeg",
-    metrics: [
-      { k: "Bookings", v: "+220%" },
+      { k: "Engagement Growth", v: "5.4x" },
       { k: "Revenue", v: "+US$3.1M" },
     ],
   },

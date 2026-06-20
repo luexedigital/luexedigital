@@ -1,17 +1,19 @@
-import React, { useMemo, useRef, useEffect, Suspense } from "react";
+import React, { useMemo, useRef, useEffect, Suspense, useState } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Environment, Lightformer, Float, useTexture } from "@react-three/drei";
 import { EffectComposer, Bloom } from "@react-three/postprocessing";
 import * as THREE from "three";
+import gsap from "gsap";
+import ScrollTrigger from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 const MARK_URL = "/luexe-mark.png";
 useTexture.preload(MARK_URL);
 
-/* Official Luexe monogram as a floating, mouse-reactive glowing billboard.
-   The flat plane gently tilts (parallax) while the surrounding particle field,
-   glass shards and volumetric lighting provide the cinematic 3D depth. */
-function LogoMark3D({ pointer }) {
+function LogoMark3D({ pointer, scrollProgress }) {
   const ref = useRef();
+  const matRef = useRef();
   const tex = useTexture(MARK_URL);
   tex.colorSpace = THREE.SRGBColorSpace;
   tex.anisotropy = 8;
@@ -20,10 +22,42 @@ function LogoMark3D({ pointer }) {
   const h = 4.4;
   const w = h * aspect;
 
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      // Scale and move the logo towards the camera as user scrolls
+      gsap.to(ref.current.position, {
+        z: 4,
+        y: 2,
+        ease: "power2.in",
+        scrollTrigger: {
+          trigger: "#top",
+          start: "top top",
+          end: "bottom top",
+          scrub: true,
+        },
+      });
+
+      // Fade out and "shatter" (opacity) as it gets close
+      gsap.to(matRef.current, {
+        opacity: 0,
+        ease: "power3.in",
+        scrollTrigger: {
+          trigger: "#top",
+          start: "50% top",
+          end: "80% top",
+          scrub: true,
+        },
+      });
+    });
+    return () => ctx.revert();
+  }, []);
+
   useFrame((state) => {
     const g = ref.current;
     if (!g) return;
     const t = state.clock.elapsedTime;
+    
+    // Slow rotation combined with mouse movement
     const targetY = pointer.current.x * 0.42 + Math.sin(t * 0.5) * 0.12;
     const targetX = -pointer.current.y * 0.3 + Math.sin(t * 0.4) * 0.05;
     g.rotation.y += (targetY - g.rotation.y) * 0.06;
@@ -35,11 +69,17 @@ function LogoMark3D({ pointer }) {
       <group ref={ref}>
         <mesh>
           <planeGeometry args={[w, h]} />
-          <meshBasicMaterial
+          {/* Black chrome effect using standard material with metalness */}
+          <meshStandardMaterial
+            ref={matRef}
             map={tex}
+            color="#0a0a0a"
+            metalness={1}
+            roughness={0.1}
             transparent
+            alphaTest={0.01}
+            envMapIntensity={3}
             depthWrite={false}
-            toneMapped={false}
           />
         </mesh>
       </group>
@@ -47,90 +87,80 @@ function LogoMark3D({ pointer }) {
   );
 }
 
-function Particles({ count, color, radius = 9, size = 0.025, speed = 0.0004 }) {
+function ShatterParticles() {
   const ref = useRef();
+  const matRef = useRef();
+  const count = 1500;
+  
   const positions = useMemo(() => {
     const arr = new Float32Array(count * 3);
     for (let i = 0; i < count; i++) {
-      const r = radius * Math.cbrt(Math.random());
-      const theta = Math.random() * Math.PI * 2;
-      const phi = Math.acos(2 * Math.random() - 1);
-      arr[i * 3] = r * Math.sin(phi) * Math.cos(theta);
-      arr[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta);
-      arr[i * 3 + 2] = r * Math.cos(phi);
+      arr[i * 3] = (Math.random() - 0.5) * 8;
+      arr[i * 3 + 1] = (Math.random() - 0.5) * 8;
+      arr[i * 3 + 2] = (Math.random() - 0.5) * 2;
     }
     return arr;
-  }, [count, radius]);
+  }, []);
 
-  useFrame(() => {
-    if (ref.current) ref.current.rotation.y += speed;
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      // Particles appear and fly up as the logo shatters
+      gsap.fromTo(matRef.current, 
+        { opacity: 0, size: 0 },
+        {
+          opacity: 1,
+          size: 0.05,
+          scrollTrigger: {
+            trigger: "#top",
+            start: "60% top",
+            end: "120% top",
+            scrub: true,
+          }
+        }
+      );
+      gsap.to(ref.current.position, {
+        y: 10,
+        z: 2,
+        scrollTrigger: {
+          trigger: "#top",
+          start: "60% top",
+          end: "150% top",
+          scrub: true,
+        }
+      });
+    });
+    return () => ctx.revert();
+  }, []);
+
+  useFrame((state) => {
+    if (ref.current) {
+      ref.current.rotation.y += 0.001;
+    }
   });
 
   return (
-    <points ref={ref}>
+    <points ref={ref} position={[0, -2, 0]}>
       <bufferGeometry>
         <bufferAttribute attach="attributes-position" args={[positions, 3]} />
       </bufferGeometry>
       <pointsMaterial
-        size={size}
-        color={color}
+        ref={matRef}
+        color="#00E5FF"
         transparent
-        opacity={0.75}
+        opacity={0}
+        size={0}
         sizeAttenuation
-        depthWrite={false}
         blending={THREE.AdditiveBlending}
+        depthWrite={false}
       />
     </points>
-  );
-}
-
-function Shards({ count }) {
-  const items = useMemo(() => {
-    const arr = [];
-    for (let i = 0; i < count; i++) {
-      arr.push({
-        pos: [
-          (Math.random() - 0.5) * 9,
-          (Math.random() - 0.5) * 6,
-          (Math.random() - 0.5) * 3 - 1.5,
-        ],
-        rot: [Math.random() * Math.PI, Math.random() * Math.PI, 0],
-        scale: 0.22 + Math.random() * 0.5,
-      });
-    }
-    return arr;
-  }, [count]);
-
-  return (
-    <>
-      {items.map((it, i) => (
-        <Float
-          key={i}
-          speed={1 + Math.random()}
-          rotationIntensity={1.5}
-          floatIntensity={1.2}
-        >
-          <mesh position={it.pos} rotation={it.rot} scale={it.scale}>
-            <octahedronGeometry args={[1, 0]} />
-            <meshStandardMaterial
-              color="#1a1a22"
-              metalness={1}
-              roughness={0.08}
-              transparent
-              opacity={0.5}
-              envMapIntensity={2.4}
-            />
-          </mesh>
-        </Float>
-      ))}
-    </>
   );
 }
 
 function Lights() {
   return (
     <>
-      <ambientLight intensity={0.4} />
+      <ambientLight intensity={0.2} />
       <pointLight position={[6, 5, 5]} intensity={60} color="#7C3AED" />
       <pointLight position={[-6, -3, 4]} intensity={50} color="#00E5FF" />
       <directionalLight position={[0, 6, 6]} intensity={1.1} color="#ffffff" />
@@ -160,54 +190,21 @@ export default function HeroScene({ config }) {
         powerPreference: "high-performance",
         stencil: false,
       }}
-      style={{ pointerEvents: "none" }}
     >
       <Lights />
 
       <Suspense fallback={null}>
         {config.environment ? (
           <Environment resolution={256} frames={1}>
-            <Lightformer
-              intensity={2.2}
-              color="#7C3AED"
-              position={[-5, 2, -3]}
-              scale={[7, 7, 1]}
-            />
-            <Lightformer
-              intensity={2.2}
-              color="#00E5FF"
-              position={[5, -1, -2]}
-              scale={[7, 7, 1]}
-            />
-            <Lightformer
-              intensity={3}
-              color="#ffffff"
-              position={[0, 5, 3]}
-              scale={[9, 2.5, 1]}
-            />
+            <Lightformer intensity={2} color="#7C3AED" position={[-5, 2, -3]} scale={[7, 7, 1]} />
+            <Lightformer intensity={2} color="#00E5FF" position={[5, -1, -2]} scale={[7, 7, 1]} />
+            <Lightformer intensity={4} color="#ffffff" position={[0, 5, 3]} scale={[9, 2.5, 1]} />
           </Environment>
         ) : null}
 
         <LogoMark3D pointer={pointer} />
+        <ShatterParticles />
 
-        {config.particles > 0 && (
-          <>
-            <Particles
-              count={Math.round(config.particles * 0.6)}
-              color="#00E5FF"
-              size={0.02}
-            />
-            <Particles
-              count={Math.round(config.particles * 0.4)}
-              color="#7C3AED"
-              size={0.03}
-              radius={7}
-              speed={-0.0003}
-            />
-          </>
-        )}
-
-        {config.shards > 0 && <Shards count={config.shards} />}
       </Suspense>
 
       {config.bloom && (
