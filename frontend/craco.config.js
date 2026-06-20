@@ -61,6 +61,20 @@ let webpackConfig = {
 };
 
 webpackConfig.devServer = (devServerConfig) => {
+  // webpack-dev-server v5 removed these v4-era keys (react-scripts still emits
+  // them). Strip / migrate them so the dev server schema validation passes.
+  delete devServerConfig.onBeforeSetupMiddleware;
+  delete devServerConfig.onAfterSetupMiddleware;
+  if ("https" in devServerConfig) {
+    const httpsCfg = devServerConfig.https;
+    delete devServerConfig.https;
+    if (httpsCfg && typeof httpsCfg === "object") {
+      devServerConfig.server = { type: "https", options: httpsCfg };
+    } else {
+      devServerConfig.server = httpsCfg ? "https" : "http";
+    }
+  }
+
   // Add health check endpoints if enabled
   if (config.enableHealthCheck && setupHealthEndpoints && healthPluginInstance) {
     const originalSetupMiddlewares = devServerConfig.setupMiddlewares;

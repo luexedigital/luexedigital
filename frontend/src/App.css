@@ -1,34 +1,176 @@
-.App-logo {
-    height: 40vmin;
+/* ===== Luexe Digital — global utilities & cinematic styling ===== */
+
+.font-heading {
+    font-family: 'General Sans', 'Satoshi', ui-sans-serif, system-ui, sans-serif;
+}
+
+/* Gradient brand text */
+.text-gradient {
+    background: linear-gradient(110deg, #F8FAFC 0%, #c9b8ff 38%, #7C3AED 60%, #00E5FF 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+}
+.text-gradient-cyan {
+    background: linear-gradient(110deg, #7C3AED 0%, #00E5FF 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+}
+
+/* Glassmorphism surfaces */
+.glass {
+    background: rgba(18, 18, 18, 0.55);
+    backdrop-filter: blur(16px) saturate(120%);
+    -webkit-backdrop-filter: blur(16px) saturate(120%);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+}
+.glass-strong {
+    background: rgba(10, 10, 12, 0.7);
+    backdrop-filter: blur(22px) saturate(130%);
+    -webkit-backdrop-filter: blur(22px) saturate(130%);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Hairline + glow border card */
+.card-luxe {
+    position: relative;
+    background: linear-gradient(180deg, rgba(26, 26, 26, 0.7) 0%, rgba(10, 10, 10, 0.6) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 1.25rem;
+    transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+        border-color 0.5s ease, box-shadow 0.5s ease;
+    will-change: transform;
+}
+.card-luxe:hover {
+    transform: translateY(-6px);
+    border-color: rgba(124, 58, 237, 0.4);
+    box-shadow: 0 30px 80px -40px rgba(124, 58, 237, 0.55),
+        0 0 0 1px rgba(0, 229, 255, 0.08) inset;
+}
+
+/* Subtle radial ambient glows */
+.glow-purple {
+    box-shadow: 0 0 80px -10px rgba(124, 58, 237, 0.55);
+}
+.glow-cyan {
+    box-shadow: 0 0 80px -10px rgba(0, 229, 255, 0.45);
+}
+
+/* Section eyebrow label */
+.eyebrow {
+    font-size: 0.72rem;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: #00E5FF;
+    font-weight: 600;
+}
+
+/* Film grain overlay */
+.grain::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 60;
     pointer-events: none;
+    opacity: 0.05;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    mix-blend-mode: overlay;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-    .App-logo {
-        animation: App-logo-spin infinite 20s linear;
+/* Marquee edge fade mask */
+.marquee-mask {
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+}
+
+/* Custom cursor */
+* {
+    cursor: none;
+}
+@media (hover: none), (pointer: coarse) {
+    * {
+        cursor: auto;
+    }
+}
+.cursor-dot,
+.cursor-ring {
+    position: fixed;
+    top: 0;
+    left: 0;
+    border-radius: 999px;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    will-change: transform;
+}
+.cursor-dot {
+    width: 6px;
+    height: 6px;
+    background: #00E5FF;
+    box-shadow: 0 0 10px #00E5FF;
+}
+.cursor-ring {
+    width: 38px;
+    height: 38px;
+    border: 1px solid rgba(248, 250, 252, 0.5);
+    transition: width 0.25s ease, height 0.25s ease, border-color 0.25s ease,
+        background-color 0.25s ease;
+    mix-blend-mode: difference;
+}
+.cursor-ring.hovering {
+    width: 64px;
+    height: 64px;
+    border-color: rgba(0, 229, 255, 0.9);
+    background: rgba(124, 58, 237, 0.12);
+}
+
+/* Hide cursor visuals on touch / reduced */
+@media (hover: none), (pointer: coarse) {
+    .cursor-dot,
+    .cursor-ring {
+        display: none;
     }
 }
 
-.App-header {
-    background-color: #0f0f10;
+/* Magnetic wrapper smoothing */
+.magnetic {
+    transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: transform;
+}
+
+/* Animated gradient outline button */
+.btn-glow {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+}
+.btn-glow::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: linear-gradient(110deg, #7C3AED, #00E5FF);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+.btn-glow:hover::before {
+    opacity: 1;
+}
+
+/* Process vertical line gradient */
+.process-line {
+    background: linear-gradient(180deg, rgba(124, 58, 237, 0) 0%, #7C3AED 18%, #00E5FF 82%, rgba(0, 229, 255, 0) 100%);
+}
+
+/* hero vignette */
+.hero-vignette {
+    background: radial-gradient(120% 120% at 50% 30%, transparent 30%, rgba(6, 6, 6, 0.65) 78%, #060606 100%);
+}
+
+.App {
+    position: relative;
     min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    font-size: calc(10px + 2vmin);
-    color: white;
-}
-
-.App-link {
-    color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-    from {
-        transform: rotate(0deg);
-    }
-    to {
-        transform: rotate(360deg);
-    }
 }

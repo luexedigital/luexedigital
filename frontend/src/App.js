@@ -1,56 +1,48 @@
-import { useEffect } from "react";
+import React, { useState } from "react";
 import "@/App.css";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import axios from "axios";
-import { HOME } from "@/constants/testIds";
+import { usePerformanceTier } from "@/hooks/usePerformanceTier";
+import { useLenis } from "@/hooks/useLenis";
+import Loader from "@/components/Loader";
+import Cursor from "@/components/Cursor";
+import Navbar from "@/components/Navbar";
+import Hero from "@/components/Hero";
+import Stats from "@/components/Stats";
+import Services from "@/components/Services";
+import Process from "@/components/Process";
+import Industries from "@/components/Industries";
+import Portfolio from "@/components/Portfolio";
+import WhyUs from "@/components/WhyUs";
+import Testimonials from "@/components/Testimonials";
+import FinalCTA from "@/components/FinalCTA";
+import Footer from "@/components/Footer";
 
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
-const API = `${BACKEND_URL}/api`;
+export default function App() {
+  const perf = usePerformanceTier();
+  const [loaded, setLoaded] = useState(false);
 
-const Home = () => {
-  const helloWorldApi = async () => {
-    try {
-      const response = await axios.get(`${API}/`);
-      console.log(response.data.message);
-    } catch (e) {
-      console.error(e, `errored out requesting / api`);
-    }
-  };
-
-  useEffect(() => {
-    helloWorldApi();
-  }, []);
+  useLenis(perf.reducedMotion);
 
   return (
-    <div>
-      <header className="App-header">
-        <a
-          data-testid={HOME.emergentLink}
-          className="App-link"
-          href="https://emergent.sh"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <img src="https://avatars.githubusercontent.com/in/1201222?s=120&u=2686cf91179bbafbc7a71bfbc43004cf9ae1acea&v=4" />
-        </a>
-        <p className="mt-5">Building something incredible ~!</p>
-      </header>
-    </div>
-  );
-};
+    <div className="App grain bg-midnight font-body text-softwhite">
+      <Cursor disabled={perf.tier === "low" || perf.reducedMotion} />
 
-function App() {
-  return (
-    <div className="App">
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Home />}>
-            <Route index element={<Home />} />
-          </Route>
-        </Routes>
-      </BrowserRouter>
+      {!loaded && <Loader onComplete={() => setLoaded(true)} />}
+
+      <Navbar />
+
+      <main>
+        <Hero perf={perf} started={loaded} />
+        <Stats />
+        <Services />
+        <Process />
+        <Industries />
+        <Portfolio />
+        <WhyUs />
+        <Testimonials />
+        <FinalCTA />
+      </main>
+
+      <Footer />
     </div>
   );
 }
-
-export default App;

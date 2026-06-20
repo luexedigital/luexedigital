@@ -7,11 +7,6 @@ module.exports = {
   ],
   theme: {
     extend: {
-      borderRadius: {
-        lg: 'var(--radius)',
-        md: 'calc(var(--radius) - 2px)',
-        sm: 'calc(var(--radius) - 4px)'
-      },
       colors: {
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
@@ -46,35 +41,62 @@ module.exports = {
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',
-        chart: {
-          '1': 'hsl(var(--chart-1))',
-          '2': 'hsl(var(--chart-2))',
-          '3': 'hsl(var(--chart-3))',
-          '4': 'hsl(var(--chart-4))',
-          '5': 'hsl(var(--chart-5))'
-        }
+        // Luexe brand palette
+        midnight: '#060606',
+        graphite: '#121212',
+        charcoal: '#1A1A1A',
+        royal: '#7C3AED',
+        electric: '#00E5FF',
+        softwhite: '#F8FAFC',
+        smoke: '#A1A1AA',
+      },
+      borderRadius: {
+        lg: 'var(--radius)',
+        md: 'calc(var(--radius) - 2px)',
+        sm: 'calc(var(--radius) - 4px)'
+      },
+      fontFamily: {
+        heading: ['General Sans', 'Satoshi', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        body: ['Inter', 'General Sans', 'ui-sans-serif', 'system-ui', 'sans-serif'],
       },
       keyframes: {
         'accordion-down': {
-          from: {
-            height: '0'
-          },
-          to: {
-            height: 'var(--radix-accordion-content-height)'
-          }
+          from: { height: '0' },
+          to: { height: 'var(--radix-accordion-content-height)' }
         },
         'accordion-up': {
-          from: {
-            height: 'var(--radix-accordion-content-height)'
-          },
-          to: {
-            height: '0'
-          }
-        }
+          from: { height: 'var(--radix-accordion-content-height)' },
+          to: { height: '0' }
+        },
+        marquee: {
+          '0%': { transform: 'translateX(0)' },
+          '100%': { transform: 'translateX(-50%)' },
+        },
+        float: {
+          '0%, 100%': { transform: 'translateY(0px)' },
+          '50%': { transform: 'translateY(-14px)' },
+        },
+        'glow-pulse': {
+          '0%, 100%': { opacity: '0.55' },
+          '50%': { opacity: '1' },
+        },
+        shimmer: {
+          '0%': { backgroundPosition: '-200% 0' },
+          '100%': { backgroundPosition: '200% 0' },
+        },
+        'spin-slow': {
+          to: { transform: 'rotate(360deg)' },
+        },
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
-        'accordion-up': 'accordion-up 0.2s ease-out'
+        'accordion-up': 'accordion-up 0.2s ease-out',
+        marquee: 'marquee 38s linear infinite',
+        'marquee-slow': 'marquee 70s linear infinite',
+        float: 'float 6s ease-in-out infinite',
+        'glow-pulse': 'glow-pulse 3.4s ease-in-out infinite',
+        shimmer: 'shimmer 3s linear infinite',
+        'spin-slow': 'spin-slow 22s linear infinite',
       }
     }
   },
