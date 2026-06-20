@@ -73,13 +73,16 @@ function LogoMark3D({ pointer, scrollProgress }) {
           <meshStandardMaterial
             ref={matRef}
             map={tex}
-            color="#0a0a0a"
+            color="#1a1a1a"
             metalness={1}
             roughness={0.1}
             transparent
             alphaTest={0.01}
             envMapIntensity={3}
             depthWrite={false}
+            emissive="#7C3AED"
+            emissiveMap={tex}
+            emissiveIntensity={0.6}
           />
         </mesh>
       </group>
@@ -160,10 +163,13 @@ function ShatterParticles() {
 function Lights() {
   return (
     <>
-      <ambientLight intensity={0.2} />
+      <ambientLight intensity={0.8} />
       <pointLight position={[6, 5, 5]} intensity={60} color="#7C3AED" />
       <pointLight position={[-6, -3, 4]} intensity={50} color="#00E5FF" />
-      <directionalLight position={[0, 6, 6]} intensity={1.1} color="#ffffff" />
+      {/* Frontal rim lights to guarantee the plane catches the color regardless of environment map */}
+      <pointLight position={[2, 0, 2]} intensity={20} color="#7C3AED" />
+      <pointLight position={[-2, 0, 2]} intensity={20} color="#00E5FF" />
+      <directionalLight position={[0, 6, 6]} intensity={1.5} color="#ffffff" />
     </>
   );
 }
