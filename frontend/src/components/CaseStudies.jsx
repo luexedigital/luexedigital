@@ -42,12 +42,12 @@ function CaseCard({ item, index }) {
   };
 
   return (
-    <Reveal delay={index * 0.05} style={{ perspective: 1500 }}>
+    <Reveal delay={index * 0.05}>
       <motion.div
         ref={ref}
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
-        style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
+        style={{ rotateX, rotateY }}
         whileHover={{ scale: 1.02 }}
         transition={{ duration: 0.4, ease: "easeOut" }}
         data-testid={`case-card-${index}`}
@@ -66,8 +66,8 @@ function CaseCard({ item, index }) {
           <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-[#0a0a0a]/60 to-transparent" />
           <div className="absolute inset-0 bg-gradient-to-r from-[#0a0a0a]/80 to-transparent" />
           
-          {/* Black Chrome overlay */}
-          <div className="absolute inset-0 mix-blend-overlay bg-gradient-to-tr from-black/80 via-white/10 to-white/30 opacity-50" />
+          {/* Black Chrome overlay - removed mix-blend-overlay for performance */}
+          <div className="absolute inset-0 bg-gradient-to-tr from-black/80 via-white/5 to-white/10 opacity-50" />
         </div>
 
         {/* Content */}

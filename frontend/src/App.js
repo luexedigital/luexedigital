@@ -76,8 +76,8 @@ export default function App() {
         />
       )}
 
-      {/* Restored Global Background */}
-      {!perf.reducedMotion && (
+      {/* Restored Global Background - Disabled on mobile to prevent double Canvas lag */}
+      {!perf.reducedMotion && perf.tier !== "low" && (
         <Suspense fallback={null}>
           <GlobalBackground config={perf.scene} />
         </Suspense>
