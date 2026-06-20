@@ -107,49 +107,6 @@ function Particles({ count, color, radius = 9, size = 0.025, speed = 0.0004 }) {
   );
 }
 
-function Shards({ count }) {
-  const items = useMemo(() => {
-    const arr = [];
-    for (let i = 0; i < count; i++) {
-      arr.push({
-        pos: [
-          (Math.random() - 0.5) * 9,
-          (Math.random() - 0.5) * 6,
-          (Math.random() - 0.5) * 3 - 1.5,
-        ],
-        rot: [Math.random() * Math.PI, Math.random() * Math.PI, 0],
-        scale: 0.22 + Math.random() * 0.5,
-      });
-    }
-    return arr;
-  }, [count]);
-
-  return (
-    <>
-      {items.map((it, i) => (
-        <Float
-          key={i}
-          speed={1 + Math.random()}
-          rotationIntensity={1.5}
-          floatIntensity={1.2}
-        >
-          <mesh position={it.pos} rotation={it.rot} scale={it.scale}>
-            <octahedronGeometry args={[1, 0]} />
-            <meshStandardMaterial
-              color="#1a1a22"
-              metalness={1}
-              roughness={0.08}
-              transparent
-              opacity={0.5}
-              envMapIntensity={2.4}
-              depthWrite={false}
-            />
-          </mesh>
-        </Float>
-      ))}
-    </>
-  );
-}
 
 function Lights() {
   return (
@@ -230,8 +187,6 @@ export default function HeroScene({ config }) {
             />
           </>
         )}
-
-        {config.shards > 0 && <Shards count={config.shards} />}
       </Suspense>
 
       {config.bloom && (
