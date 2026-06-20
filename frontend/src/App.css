@@ -43,7 +43,34 @@
     transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1),
         border-color 0.5s ease, box-shadow 0.5s ease;
     will-change: transform;
+    overflow: hidden; /* Ensure spotlight stays inside */
 }
+
+/* Spotlight effect */
+.card-luxe::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    background: radial-gradient(
+        800px circle at var(--mouse-x) var(--mouse-y),
+        rgba(124, 58, 237, 0.1),
+        transparent 40%
+    );
+}
+
+.card-luxe:hover::before {
+    opacity: 1;
+}
+
+.card-luxe > * {
+    position: relative;
+    z-index: 1;
+}
+
 .card-luxe:hover {
     transform: translateY(-6px);
     border-color: rgba(124, 58, 237, 0.4);
@@ -173,4 +200,12 @@
 .App {
     position: relative;
     min-height: 100vh;
+}
+
+/* Accessibility Focus States */
+*:focus-visible {
+    outline: 2px solid #00E5FF;
+    outline-offset: 4px;
+    box-shadow: 0 0 15px rgba(0, 229, 255, 0.5);
+    border-radius: 2px;
 }

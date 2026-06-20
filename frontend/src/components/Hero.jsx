@@ -100,7 +100,6 @@ export default function Hero({ perf, started }) {
               "Performance Marketing",
               "Web Development",
               "Lead Gen",
-              "Branding",
               "SEO",
               "CRO",
             ].map((t, i) => (

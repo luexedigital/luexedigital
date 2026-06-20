@@ -1,14 +1,23 @@
-import React from "react";
+import React, { useRef } from "react";
+import { motion, useScroll } from "framer-motion";
 import { Reveal } from "@/components/Reveal";
 import { PROCESS } from "@/lib/data";
+import InteractiveGrid from "@/components/InteractiveGrid";
 
 export default function Process() {
+  const containerRef = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start center", "end center"]
+  });
+
   return (
     <section
       id="process"
       data-testid="process-section"
-      className="relative overflow-hidden py-24 md:py-32"
+      className="relative border-t border-white/5 bg-graphite/30 py-24 md:py-32"
     >
+      <InteractiveGrid />
       <div className="pointer-events-none absolute left-1/2 top-0 h-[400px] w-[400px] -translate-x-1/2 rounded-full bg-royal/10 blur-[140px]" />
       <div className="mx-auto max-w-7xl px-6 md:px-12">
         <div className="mb-16 max-w-2xl">
@@ -23,9 +32,15 @@ export default function Process() {
           </Reveal>
         </div>
 
-        <div className="relative">
-          {/* center/left vertical line */}
-          <div className="process-line absolute left-[27px] top-2 h-full w-px md:left-1/2 md:-translate-x-1/2" />
+        <div ref={containerRef} className="relative">
+          {/* center/left vertical line (base) */}
+          <div className="absolute left-[27px] top-2 h-full w-px bg-white/5 md:left-1/2 md:-translate-x-1/2" />
+          
+          {/* animated glow line */}
+          <motion.div 
+            className="process-line absolute left-[27px] top-2 h-full w-px origin-top md:left-1/2 md:-translate-x-1/2" 
+            style={{ scaleY: scrollYProgress }}
+          />
 
           <div className="flex flex-col gap-12 md:gap-0">
             {PROCESS.map((p, i) => {

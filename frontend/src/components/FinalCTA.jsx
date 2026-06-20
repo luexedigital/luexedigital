@@ -33,7 +33,7 @@ export default function FinalCTA() {
         <Reveal delay={0.15}>
           <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
             <MagneticButton
-              href="mailto:hello@luexe.digital?subject=Free%20Growth%20Consultation"
+              href="mailto:luexedigital@gmail.com?subject=Free%20Growth%20Consultation"
               testid="final-primary-cta"
             >
               Book a Free Growth Consultation
@@ -49,11 +49,11 @@ export default function FinalCTA() {
           <p className="mt-8 font-body text-sm text-smoke">
             Or email us directly at{" "}
             <a
-              href="mailto:hello@luexe.digital"
+              href="mailto:luexedigital@gmail.com"
               data-testid="contact-email-link"
               className="text-electric underline-offset-4 hover:underline"
             >
-              hello@luexe.digital
+              luexedigital@gmail.com
             </a>
           </p>
         </Reveal>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "@/App.css";
 import { usePerformanceTier } from "@/hooks/usePerformanceTier";
 import { useLenis } from "@/hooks/useLenis";
@@ -15,6 +15,8 @@ import WhyUs from "@/components/WhyUs";
 import Testimonials from "@/components/Testimonials";
 import FinalCTA from "@/components/FinalCTA";
 import Footer from "@/components/Footer";
+import LaserScroll from "@/components/LaserScroll";
+import SEO from "@/components/SEO";
 
 export default function App() {
   const perf = usePerformanceTier();
@@ -22,9 +24,26 @@ export default function App() {
 
   useLenis(perf.reducedMotion);
 
+  // Global mouse tracking for spotlight effect on cards
+  useEffect(() => {
+    if (perf.reducedMotion) return;
+    const handleMouseMove = (e) => {
+      const cards = document.querySelectorAll(".card-luxe");
+      for (const card of cards) {
+        const rect = card.getBoundingClientRect();
+        card.style.setProperty("--mouse-x", `${e.clientX - rect.left}px`);
+        card.style.setProperty("--mouse-y", `${e.clientY - rect.top}px`);
+      }
+    };
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => window.removeEventListener("mousemove", handleMouseMove);
+  }, [perf.reducedMotion]);
+
   return (
     <div className="App grain bg-midnight font-body text-softwhite">
+      <SEO />
       <Cursor disabled={perf.tier === "low" || perf.reducedMotion} />
+      <LaserScroll />
 
       {!loaded && <Loader onComplete={() => setLoaded(true)} />}
 

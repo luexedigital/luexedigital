@@ -22,34 +22,70 @@ export default function Testimonials() {
           </Reveal>
         </div>
 
-        <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
-          {TESTIMONIALS.map((t, i) => (
-            <Reveal key={t.name} delay={i * 0.08}>
-              <div
-                data-testid={`testimonial-${i}`}
-                className="card-luxe flex h-full flex-col p-7 md:p-8"
-              >
-                <Quote className="h-8 w-8 text-royal/70" />
-                <p className="mt-5 flex-1 font-body text-base leading-relaxed text-softwhite/90">
-                  “{t.quote}”
-                </p>
-                <div className="mt-6 flex items-center gap-1">
-                  {Array.from({ length: 5 }).map((_, s) => (
-                    <Star
-                      key={s}
-                      className="h-3.5 w-3.5 fill-electric text-electric"
-                    />
-                  ))}
-                </div>
-                <div className="mt-4 border-t border-white/10 pt-4">
-                  <p className="font-heading text-sm font-semibold text-softwhite">
-                    {t.name}
+        <div className="relative mt-10 flex overflow-hidden w-full">
+          {/* Fading edges for a cleaner look */}
+          <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-24 bg-gradient-to-r from-midnight to-transparent" />
+          <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-24 bg-gradient-to-l from-midnight to-transparent" />
+          
+          <div className="flex w-max animate-marquee items-center group">
+            {/* We render two sets of the same testimonials to create a seamless loop */}
+            <div className="flex gap-6 px-3">
+              {TESTIMONIALS.map((t, i) => (
+                <div
+                  key={t.name + '-1'}
+                  data-testid={`testimonial-${i}`}
+                  className="card-luxe flex w-[350px] md:w-[400px] shrink-0 flex-col p-7 md:p-8 hover:bg-white/5 transition-colors"
+                >
+                  <Quote className="h-8 w-8 text-royal/70" />
+                  <p className="mt-5 flex-1 font-body text-base leading-relaxed text-softwhite/90">
+                    “{t.quote}”
                   </p>
-                  <p className="font-body text-xs text-smoke">{t.role}</p>
+                  <div className="mt-6 flex items-center gap-1">
+                    {Array.from({ length: 5 }).map((_, s) => (
+                      <Star
+                        key={s}
+                        className="h-3.5 w-3.5 fill-electric text-electric"
+                      />
+                    ))}
+                  </div>
+                  <div className="mt-4 border-t border-white/10 pt-4">
+                    <p className="font-heading text-sm font-semibold text-softwhite">
+                      {t.name}
+                    </p>
+                    <p className="font-body text-xs text-smoke">{t.role}</p>
+                  </div>
                 </div>
-              </div>
-            </Reveal>
-          ))}
+              ))}
+            </div>
+
+            <div className="flex gap-6 px-3" aria-hidden="true">
+              {TESTIMONIALS.map((t, i) => (
+                <div
+                  key={t.name + '-2'}
+                  className="card-luxe flex w-[350px] md:w-[400px] shrink-0 flex-col p-7 md:p-8 hover:bg-white/5 transition-colors"
+                >
+                  <Quote className="h-8 w-8 text-royal/70" />
+                  <p className="mt-5 flex-1 font-body text-base leading-relaxed text-softwhite/90">
+                    “{t.quote}”
+                  </p>
+                  <div className="mt-6 flex items-center gap-1">
+                    {Array.from({ length: 5 }).map((_, s) => (
+                      <Star
+                        key={s}
+                        className="h-3.5 w-3.5 fill-electric text-electric"
+                      />
+                    ))}
+                  </div>
+                  <div className="mt-4 border-t border-white/10 pt-4">
+                    <p className="font-heading text-sm font-semibold text-softwhite">
+                      {t.name}
+                    </p>
+                    <p className="font-body text-xs text-smoke">{t.role}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
     </section>
