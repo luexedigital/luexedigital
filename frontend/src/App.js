@@ -17,6 +17,7 @@ import WhyUs from "@/components/WhyUs";
 import Testimonials from "@/components/Testimonials";
 import FinalCTA from "@/components/FinalCTA";
 import Footer from "@/components/Footer";
+import LaserScroll from "@/components/LaserScroll";
 import SEO from "@/components/SEO";
 
 export default function App() {
@@ -33,6 +34,7 @@ export default function App() {
       <div className="pointer-events-none fixed inset-0 z-50 mix-blend-overlay opacity-[0.03] grain" />
 
       <Cursor disabled={perf.tier === "low" || perf.reducedMotion} />
+      <LaserScroll />
 
       <AnimatePresence mode="wait">
         {!loaded ? (
