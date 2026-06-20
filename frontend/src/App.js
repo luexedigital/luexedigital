@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Suspense, lazy } from "react";
+import React, { useState, useEffect } from "react";
 import { AnimatePresence } from "framer-motion";
 import "@/App.css";
 import { usePerformanceTier } from "@/hooks/usePerformanceTier";
@@ -17,74 +17,22 @@ import WhyUs from "@/components/WhyUs";
 import Testimonials from "@/components/Testimonials";
 import FinalCTA from "@/components/FinalCTA";
 import Footer from "@/components/Footer";
-import LaserScroll from "@/components/LaserScroll";
 import SEO from "@/components/SEO";
-
-const GlobalBackground = lazy(() => import("@/three/GlobalBackground"));
 
 export default function App() {
   const perf = usePerformanceTier();
   const [loaded, setLoaded] = useState(false);
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
 
   useLenis(perf.reducedMotion);
 
-  // Global mouse tracking for spot lighting
-  useEffect(() => {
-    if (perf.reducedMotion || typeof window === "undefined") return;
-    
-    // Completely disable global JS mouse tracking on mobile to save battery and reduce lag
-    const isMobile = window.matchMedia("(max-width: 768px)").matches;
-    if (isMobile) return;
-
-    let ticking = false;
-
-    const handleMouseMove = (e) => {
-      setMousePos({ x: e.clientX, y: e.clientY });
-
-      if (!ticking) {
-        window.requestAnimationFrame(() => {
-          const card = e.target.closest(".card-luxe");
-          if (card) {
-            const rect = card.getBoundingClientRect();
-            card.style.setProperty("--mouse-x", `${e.clientX - rect.left}px`);
-            card.style.setProperty("--mouse-y", `${e.clientY - rect.top}px`);
-          }
-          ticking = false;
-        });
-        ticking = true;
-      }
-    };
-    window.addEventListener("mousemove", handleMouseMove, { passive: true });
-    return () => window.removeEventListener("mousemove", handleMouseMove);
-  }, [perf.reducedMotion]);
-
   return (
-    <div className="App bg-midnight font-body text-softwhite relative selection:bg-electric/30 selection:text-white">
+    <div className="App bg-midnight font-body text-softwhite relative selection:bg-electric/30 selection:text-white overflow-hidden">
       <SEO />
       
       {/* LAYER 5: Infinite Background Film Grain Overlay */}
       <div className="pointer-events-none fixed inset-0 z-50 mix-blend-overlay opacity-[0.03] grain" />
 
-      {/* Global Mouse Spotlight (Desktop Only) */}
-      {!perf.reducedMotion && (
-        <div 
-          className="pointer-events-none fixed inset-0 z-[1] transition-opacity duration-300 hidden md:block"
-          style={{
-            background: `radial-gradient(600px circle at ${mousePos.x}px ${mousePos.y}px, rgba(124, 58, 237, 0.05), rgba(0, 229, 255, 0.03), transparent 40%)`
-          }}
-        />
-      )}
-
-      {/* Restored Global Background - Disabled on mobile to prevent double Canvas lag */}
-      {!perf.reducedMotion && perf.tier !== "low" && (
-        <Suspense fallback={null}>
-          <GlobalBackground config={perf.scene} />
-        </Suspense>
-      )}
-
       <Cursor disabled={perf.tier === "low" || perf.reducedMotion} />
-      <LaserScroll />
 
       <AnimatePresence mode="wait">
         {!loaded ? (
