@@ -2,6 +2,7 @@ import React, { useRef, useEffect } from "react";
 import { ArrowUpRight } from "lucide-react";
 import { useInView } from "framer-motion";
 import { Reveal } from "@/components/Reveal";
+import TextReveal from "@/components/TextReveal";
 import MagneticButton from "@/components/MagneticButton";
 
 export default function FinalCTA() {
@@ -34,17 +35,17 @@ export default function FinalCTA() {
         <Reveal>
           <p className="eyebrow mb-6">Let's Talk Growth</p>
         </Reveal>
-        <Reveal delay={0.05}>
-          <h2 className="mx-auto max-w-4xl font-heading text-[2.6rem] font-bold leading-[0.95] tracking-tighter text-softwhite sm:text-6xl lg:text-7xl">
-            Let's Build Your <br />
-            <span className="text-gradient"> Growth Engine.</span>
-          </h2>
-        </Reveal>
-        <Reveal delay={0.1}>
-          <p className="mx-auto mt-6 max-w-xl font-body text-base text-smoke md:text-lg">
-            From premium websites and branding to performance marketing and lead generation, Luexe Digital creates digital experiences that help businesses scale.
-          </p>
-        </Reveal>
+        
+        <h2 className="mx-auto max-w-4xl font-heading text-[2.6rem] font-bold leading-[0.95] tracking-tighter text-softwhite sm:text-6xl lg:text-7xl">
+          <TextReveal text="Let's Build Something" delay={0.1} />
+          <span className="text-gradient block mt-2">
+            <TextReveal text="Extraordinary." delay={0.4} />
+          </span>
+        </h2>
+        
+        <div className="mx-auto mt-6 max-w-xl font-body text-base text-smoke md:text-lg">
+          <TextReveal text="From premium websites and branding to performance marketing and lead generation, Luexe Digital creates digital experiences that help businesses scale." delay={0.6} duration={0.8} stagger={0.02} />
+        </div>
 
         <Reveal delay={0.15}>
           <div className="mt-12 flex flex-wrap items-center justify-center gap-4">

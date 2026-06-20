@@ -7,6 +7,7 @@ import Loader from "@/components/Loader";
 import Cursor from "@/components/Cursor";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
+import Marquee from "@/components/Marquee";
 import Stats from "@/components/Stats";
 import Services from "@/components/Services";
 import Process from "@/components/Process";
@@ -19,22 +20,27 @@ import Footer from "@/components/Footer";
 import LaserScroll from "@/components/LaserScroll";
 import SEO from "@/components/SEO";
 
-const GlobalBackground = lazy(() => import("@/three/GlobalBackground"));
+// Global Scene Manager handles all 3D layers centrally
+const GlobalSceneManager = lazy(() => import("@/three/GlobalSceneManager"));
 
 export default function App() {
   const perf = usePerformanceTier();
   const [loaded, setLoaded] = useState(false);
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
 
   useLenis(perf.reducedMotion);
 
-  // Global mouse tracking for spotlight effect on cards (Optimized)
+  // Global mouse tracking for spot lighting
   useEffect(() => {
-    if (perf.reducedMotion) return;
+    if (perf.reducedMotion || typeof window === "undefined") return;
     let ticking = false;
 
     const handleMouseMove = (e) => {
+      setMousePos({ x: e.clientX, y: e.clientY });
+
       if (!ticking) {
         window.requestAnimationFrame(() => {
+          // Dynamic reflections & card highlights
           const card = e.target.closest(".card-luxe");
           if (card) {
             const rect = card.getBoundingClientRect();
@@ -51,18 +57,33 @@ export default function App() {
   }, [perf.reducedMotion]);
 
   return (
-    <div className="App grain bg-midnight font-body text-softwhite">
+    <div className="App bg-midnight font-body text-softwhite relative selection:bg-electric/30 selection:text-white">
       <SEO />
-      
+
+      {/* LAYER 5: Infinite Background Film Grain Overlay */}
+      <div className="pointer-events-none fixed inset-0 z-50 mix-blend-overlay opacity-[0.03] grain" />
+
+      {/* Global Mouse Spotlight (Desktop Only) */}
+      {!perf.reducedMotion && (
+        <div 
+          className="pointer-events-none fixed inset-0 z-[1] transition-opacity duration-300 hidden md:block"
+          style={{
+            background: `radial-gradient(600px circle at ${mousePos.x}px ${mousePos.y}px, rgba(124, 58, 237, 0.05), rgba(0, 229, 255, 0.03), transparent 40%)`
+          }}
+        />
+      )}
+
+      {/* LAYER 1, 3, 4: Global Scene Manager (Background + Effects + Geometry) */}
       {!perf.reducedMotion && (
         <Suspense fallback={null}>
-          <GlobalBackground config={perf.scene} />
+          <GlobalSceneManager config={perf.scene} />
         </Suspense>
       )}
 
       <Cursor disabled={perf.tier === "low" || perf.reducedMotion} />
       <LaserScroll />
 
+      {/* LAYER 2: Interactive HTML Content */}
       <AnimatePresence mode="wait">
         {!loaded ? (
           <Loader key="loader" onComplete={() => setLoaded(true)} />
@@ -71,6 +92,7 @@ export default function App() {
             <Navbar />
             <main>
               <Hero perf={perf} started={loaded} />
+              <Marquee />
               <Stats />
               <Services />
               <Process />
