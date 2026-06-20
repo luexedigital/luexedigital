@@ -42,27 +42,27 @@ function detect() {
 const SCENE_CONFIG = {
   high: {
     dpr: [1, 2],
-    particles: 1500,
-    shards: 6,
+    particles: 1000,
+    shards: 0,
     bloom: true,
     bloomIntensity: 0.95,
     antialias: true,
     environment: true,
   },
   mid: {
-    dpr: [1, 1.5],
-    particles: 650,
-    shards: 3,
+    dpr: [1, 1], // strictly cap DPR at 1 for mid devices
+    particles: 400,
+    shards: 0,
     bloom: true,
-    bloomIntensity: 0.7,
-    antialias: true,
-    environment: true,
+    bloomIntensity: 0.6,
+    antialias: false,
+    environment: false, // Turn off heavy environment reflections
   },
   low: {
-    dpr: 1,
-    particles: 220,
+    dpr: [0.75, 1], // downscale below native if needed
+    particles: 120, // vastly reduced geometry for low end
     shards: 0,
-    bloom: false,
+    bloom: false, // Absolutely no bloom
     bloomIntensity: 0,
     antialias: false,
     environment: false,

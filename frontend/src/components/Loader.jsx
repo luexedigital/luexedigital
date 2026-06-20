@@ -42,7 +42,7 @@ export default function Loader({ onComplete }) {
       transition={{ duration: 1.4, ease: [0.76, 0, 0.24, 1] }}
     >
       {/* Cinematic Vignette & Core Glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80vw] h-[80vw] md:w-[600px] md:h-[600px] bg-royal/10 blur-[120px] rounded-full pointer-events-none" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120vw] h-[120vw] md:w-[800px] md:h-[800px] bg-[radial-gradient(circle_at_center,rgba(124,58,237,0.1)_0%,transparent_60%)] rounded-full pointer-events-none" />
       <div className="absolute inset-0 pointer-events-none shadow-[inset_0_0_100px_rgba(0,0,0,0.8)]" />
 
       {/* Header */}

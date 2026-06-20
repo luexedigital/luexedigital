@@ -19,7 +19,8 @@ function LogoMark3D({ pointer }) {
   const matRef = useRef();
   const tex = useTexture(MARK_URL);
   tex.colorSpace = THREE.SRGBColorSpace;
-  tex.anisotropy = 8;
+  // Reduce anisotropy to save GPU memory bandwidth on mobile devices
+  tex.anisotropy = 2;
 
   const aspect = tex.image ? tex.image.width / tex.image.height : 1;
   const h = 4.4;
