@@ -20,8 +20,7 @@ import Footer from "@/components/Footer";
 import LaserScroll from "@/components/LaserScroll";
 import SEO from "@/components/SEO";
 
-// Global Scene Manager handles all 3D layers centrally
-const GlobalSceneManager = lazy(() => import("@/three/GlobalSceneManager"));
+const GlobalBackground = lazy(() => import("@/three/GlobalBackground"));
 
 export default function App() {
   const perf = usePerformanceTier();
@@ -40,7 +39,6 @@ export default function App() {
 
       if (!ticking) {
         window.requestAnimationFrame(() => {
-          // Dynamic reflections & card highlights
           const card = e.target.closest(".card-luxe");
           if (card) {
             const rect = card.getBoundingClientRect();
@@ -59,7 +57,7 @@ export default function App() {
   return (
     <div className="App bg-midnight font-body text-softwhite relative selection:bg-electric/30 selection:text-white">
       <SEO />
-
+      
       {/* LAYER 5: Infinite Background Film Grain Overlay */}
       <div className="pointer-events-none fixed inset-0 z-50 mix-blend-overlay opacity-[0.03] grain" />
 
@@ -73,17 +71,16 @@ export default function App() {
         />
       )}
 
-      {/* LAYER 1, 3, 4: Global Scene Manager (Background + Effects + Geometry) */}
+      {/* Restored Global Background */}
       {!perf.reducedMotion && (
         <Suspense fallback={null}>
-          <GlobalSceneManager config={perf.scene} />
+          <GlobalBackground config={perf.scene} />
         </Suspense>
       )}
 
       <Cursor disabled={perf.tier === "low" || perf.reducedMotion} />
       <LaserScroll />
 
-      {/* LAYER 2: Interactive HTML Content */}
       <AnimatePresence mode="wait">
         {!loaded ? (
           <Loader key="loader" onComplete={() => setLoaded(true)} />

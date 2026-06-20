@@ -1,13 +1,16 @@
-import React from "react";
+import React, { Suspense, lazy } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { ArrowUpRight, ArrowDown } from "lucide-react";
 import MagneticButton from "@/components/MagneticButton";
 import LogoMark from "@/components/LogoMark";
 
+const HeroScene = lazy(() => import("@/three/HeroScene"));
+
 const EASE = [0.22, 1, 0.36, 1];
 
 export default function Hero({ perf, started }) {
   const reduce = useReducedMotion() || perf.reducedMotion;
+  const showCanvas = started && !reduce;
 
   return (
     <section
@@ -17,14 +20,22 @@ export default function Hero({ perf, started }) {
     >
       {/* base gradient backdrop (paints instantly, helps perceived FCP) */}
       <div className="absolute inset-0 -z-10 bg-midnight">
-        {/* We keep these soft static blurs for reduced-motion or as fallbacks before 3D loads */}
-        <div className="absolute left-1/2 top-1/3 h-[520px] w-[520px] -translate-x-1/2 rounded-full bg-royal/10 blur-[140px]" />
-        <div className="absolute right-1/4 top-1/2 h-[420px] w-[420px] rounded-full bg-electric/5 blur-[150px]" />
+        <div className="absolute left-1/2 top-1/3 h-[520px] w-[520px] -translate-x-1/2 rounded-full bg-royal/15 blur-[140px]" />
+        <div className="absolute right-1/4 top-1/2 h-[420px] w-[420px] rounded-full bg-electric/10 blur-[150px]" />
       </div>
+
+      {/* 3D canvas (lazy) */}
+      {showCanvas && (
+        <div className="fixed inset-0 z-0 pointer-events-none">
+          <Suspense fallback={null}>
+            <HeroScene config={perf.scene} />
+          </Suspense>
+        </div>
+      )}
 
       {/* reduced-motion static centerpiece */}
       {reduce && (
-        <div className="absolute inset-0 z-0 flex items-center justify-center pointer-events-none">
+        <div className="absolute inset-0 z-0 flex items-center justify-center">
           <div className="animate-glow-pulse opacity-70">
             <LogoMark size={220} />
           </div>
