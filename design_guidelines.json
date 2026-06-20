@@ -1,0 +1,155 @@
+{
+  "theme": "DARK",
+  "archetype": "5 (Luxury) mixed with 7 (Electric & Neon)",
+  "design_philosophy": "Dark, luxurious, cinematic, and futuristic. Think: Apple × Linear × Tesla × Stripe × Awwwards. Billion-dollar luxury technology company. Minimal but highly interactive. Sophisticated, not flashy.",
+  "global_rules": [
+    "No generic SaaS look. Needs a cinematic, high-end agency feel.",
+    "All interactive and key informational elements MUST include a data-testid attribute.",
+    "Implement prefers-reduced-motion checks for all animations.",
+    "Performance is strictly prioritized: FCP under 2s, 60fps animations."
+  ],
+  "colors": {
+    "background": "#060606",
+    "surface": "#121212",
+    "surface_elevated": "#1A1A1A",
+    "primary": "#7C3AED",
+    "secondary": "#00E5FF",
+    "text_primary": "#F8FAFC",
+    "text_secondary": "#A1A1AA",
+    "border": "rgba(255, 255, 255, 0.05)",
+    "glass_bg": "rgba(18, 18, 18, 0.6)"
+  },
+  "typography": {
+    "headings": {
+      "family": "'General Sans', sans-serif",
+      "weight": "700",
+      "tracking": "tracking-tighter",
+      "scale": {
+        "h1": "text-5xl md:text-6xl lg:text-7xl",
+        "h2": "text-3xl md:text-4xl lg:text-5xl",
+        "h3": "text-xl md:text-2xl lg:text-3xl"
+      }
+    },
+    "body": {
+      "family": "'Inter', sans-serif",
+      "weight": "400",
+      "tracking": "tracking-normal",
+      "scale": {
+        "base": "text-base md:text-lg",
+        "small": "text-sm",
+        "overline": "text-xs tracking-[0.2em] uppercase"
+      }
+    }
+  },
+  "spacing_and_layout": {
+    "section_padding": "py-24 md:py-32",
+    "container_max_width": "max-w-7xl mx-auto px-6 md:px-12",
+    "grid_system": "Use Tetris Bento Grid mode for Stats and Services. Prioritize asymmetry. Use gap-6 to gap-12 depending on viewport."
+  },
+  "components": {
+    "buttons": {
+      "primary": "Magnetic interaction, solid or rich gradient border, bg-white text-black or bg-primary text-white. Hover state should trigger a subtle Royal Purple or Electric Cyan glow. padding: px-8 py-4. rounded-full.",
+      "secondary": "Glassmorphism, transparent background, 1px solid border-white/10, hover:bg-white/5. Magnetic."
+    },
+    "cards": {
+      "style": "Crystal Glassmorphism or Tracing Beam variants. bg-[#121212]/80 backdrop-blur-xl border border-white/5. Hover lifts up slightly with a very subtle cyan/purple ambient drop-shadow."
+    }
+  },
+  "motion_and_3d": {
+    "scroll": "Lenis smooth scrolling is mandatory for the premium feel.",
+    "reveal": "GSAP or Framer Motion split-text reveals for headings. Staggered fade-up for bento grid cards.",
+    "cursor": "Custom glowing cursor or magnetic dot that blends with background using mix-blend-mode.",
+    "adaptive_performance_strategy": {
+      "desktop": "Full R3F scene. High-poly L+D monogram, floating glass shards, particles, volumetric lighting, post-processing bloom enabled. dpr=[1, 2].",
+      "mid_range": "Reduce particle count. Disable heavy volumetric lighting. Keep basic bloom and metallic textures.",
+      "mobile": "Disable post-processing bloom. Simplify L+D geometry (or use standard standard material without complex environment reflections). Minimal particles. Limit dpr to 1 to ensure 60fps."
+    }
+  },
+  "sections": [
+    {
+      "id": "loader",
+      "description": "Premium loading screen. Deep black background with a minimalist glowing counter or L+D trace. Ascends out of view upon reaching 100%.",
+      "layout": "fixed inset-0 z-[100] flex items-center justify-center bg-[#060606]"
+    },
+    {
+      "id": "hero",
+      "description": "3D Hero Centerpiece. L+D Monogram rotating. Copy aligned gracefully with generous negative space.",
+      "layout": "min-h-screen relative flex items-center. Canvas absolute inset-0 z-0. Content relative z-10.",
+      "content": {
+        "headline": "Luexe Digital",
+        "subheadline": "Building Digital Experiences That Drive Growth.",
+        "description": "Performance Marketing • Website Development • Lead Generation • Branding • SEO • Conversion Optimization",
+        "ctas": ["Book a Free Growth Consultation", "View Our Work"]
+      },
+      "3d_details": "Use @react-three/fiber and @react-three/drei. Floating geometric L+D monogram logo (metallic graphite with glowing purple/cyan edges). Particles in background. Mouse-reactive rotation."
+    },
+    {
+      "id": "stats",
+      "description": "Animated Stats section. Highlighting elite metrics.",
+      "layout": "Bento grid (grid-cols-1 md:grid-cols-4), tight gaps, stark typography."
+    },
+    {
+      "id": "services",
+      "description": "Services bento grid (Performance Marketing, Website Development, Branding & Creative, Lead Generation).",
+      "layout": "Grid with varied spans. Use Tracing Beam or subtle glass styling. Icons should be @phosphor-icons/react (Duotone)."
+    },
+    {
+      "id": "process",
+      "description": "Process timeline (Discover → Strategize → Design → Build → Launch → Scale).",
+      "layout": "Vertical glowing line connecting steps or a horizontal scroll section."
+    },
+    {
+      "id": "industries",
+      "description": "Industries We Serve.",
+      "layout": "Minimalist list or looping marquee with low-contrast typography to act as visual texture."
+    },
+    {
+      "id": "portfolio",
+      "description": "Portfolio / Case Studies. Image-heavy, utilizing parallax effects.",
+      "layout": "Large asynchronous cards. Use provided images."
+    },
+    {
+      "id": "why_us",
+      "description": "Why Choose Luexe Digital.",
+      "layout": "High-contrast text block with deep storytelling."
+    },
+    {
+      "id": "testimonials",
+      "description": "Client reviews.",
+      "layout": "Clean cards, quote icons, muted star ratings."
+    },
+    {
+      "id": "footer_cta",
+      "description": "Final CTA and Footer.",
+      "layout": "Massive typography (text-[10vw]). High-contrast CTA section merging into the footer."
+    }
+  ],
+  "media": {
+    "image_urls": [
+      {
+        "url": "https://images.pexels.com/photos/15744089/pexels-photo-15744089.jpeg",
+        "category": "portfolio",
+        "description": "Kuwait City skyline night - use for local GCC context or case study background"
+      },
+      {
+        "url": "https://images.pexels.com/photos/27141316/pexels-photo-27141316.jpeg",
+        "category": "portfolio",
+        "description": "Dark modern dashboard UI - use for Web Development or Performance Marketing service visualization"
+      },
+      {
+        "url": "https://images.pexels.com/photos/8068660/pexels-photo-8068660.jpeg",
+        "category": "background",
+        "description": "Luxury dark office interior - use for 'Why Choose Us' or 'About' section backgrounds"
+      }
+    ]
+  },
+  "instructions_to_main_agent": [
+    "Install required dependencies: @react-three/fiber @react-three/drei three framer-motion gsap @studio-freight/react-lenis @phosphor-icons/react",
+    "Load 'General Sans' via fontshare link in index.html or define locally. Use 'Inter' for body.",
+    "Implement the 3D scene using primitive geometries (like Box/Extrude) or Text3D to form the 'L' and 'D' if a custom GLTF isn't provided. Apply a MeshStandardMaterial with high metalness and low roughness for the graphite look, and use Emissive materials for the purple/cyan glowing edges.",
+    "Strictly follow the performance strategy: Use <Suspense> for 3D elements, detect mobile devices to downgrade dpr and disable expensive shaders/bloom via conditional rendering.",
+    "For the bento grids, do not use Shadcn 'Card' if it restricts layout—build custom HTML/Tailwind divs for maximum control.",
+    "Add 'data-testid' to all buttons, navigation links, and major section containers.",
+    "Never use pure black/white for text without slight muting, and stick to the defined color palette."
+  ]
+}
