@@ -1,69 +1,100 @@
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import gsap from "gsap";
-import LogoMark from "@/components/LogoMark";
 
 export default function Loader({ onComplete }) {
-  const [exiting, setExiting] = useState(false);
+  const [progress, setProgress] = useState(0);
 
   useEffect(() => {
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (reduce) {
-      setTimeout(() => setExiting(true), 500);
+      setTimeout(() => onComplete?.(), 500);
       return;
     }
 
-    const tl = gsap.timeline({
-      onComplete: () => setExiting(true),
-    });
+    let start = null;
+    const duration = 2200; // 2.2 seconds total loading sequence
 
-    // 1. Single cyan particle appears
-    tl.fromTo(".particle-core", { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.3, ease: "back.out(1.5)" });
-    
-    // 2. Particle multiplies (simulated by splitting out rings/dots)
-    tl.to(".particle-split", { scale: 1.5, opacity: 0.5, duration: 0.4, stagger: 0.1, ease: "power2.out" }, "-=0.1");
-    
-    // 3. Assemble: L + D Monogram
-    tl.to(".particle-container", { scale: 0.1, opacity: 0, duration: 0.3, ease: "power3.in" }, "+=0.1");
-    tl.fromTo(".loader-logo", { scale: 0.8, opacity: 0, filter: "blur(10px)" }, { scale: 1, opacity: 1, filter: "blur(0px)", duration: 0.5, ease: "power2.out" }, "-=0.1");
-    
-    // 4. LUEXE DIGITAL appears
-    tl.fromTo(".loader-text", { y: 10, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, ease: "power2.out" }, "-=0.2");
-    
-    // Wait briefly before exiting
-    tl.to({}, { duration: 0.3 });
+    const step = (timestamp) => {
+      if (!start) start = timestamp;
+      const progressTime = timestamp - start;
+      const percentage = Math.min((progressTime / duration) * 100, 100);
+      
+      // Premium Expo ease-out for the number counter
+      const easeOutExpo = percentage === 100 ? 1 : 1 - Math.pow(2, -10 * (percentage / 100));
+      setProgress(Math.floor(easeOutExpo * 100));
 
-    return () => tl.kill();
-  }, []);
+      if (progressTime < duration) {
+        window.requestAnimationFrame(step);
+      } else {
+        // Hold at 100% for a tiny beat before firing complete
+        setTimeout(() => onComplete?.(), 300);
+      }
+    };
+    window.requestAnimationFrame(step);
+  }, [onComplete]);
 
   return (
     <motion.div
       data-testid="loader-screen"
-      className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-midnight"
+      className="fixed inset-0 z-[100] flex flex-col items-center justify-between bg-[#050308] p-8 md:p-12 overflow-hidden"
       initial={{ opacity: 1 }}
-      animate={exiting ? { opacity: 0 } : { opacity: 1 }}
-      transition={{ duration: 0.8, ease: "easeInOut" }}
-      onAnimationComplete={() => exiting && onComplete?.()}
+      exit={{ y: "-100%", opacity: 0, scale: 0.95 }}
+      transition={{ duration: 1.4, ease: [0.76, 0, 0.24, 1] }}
     >
-      <div className="relative flex flex-col items-center justify-center h-40">
-        
-        {/* The initial particle system */}
-        <div className="particle-container absolute inset-0 flex items-center justify-center">
-          <div className="particle-split absolute w-4 h-4 rounded-full bg-electric blur-[2px]" style={{ transform: 'translate(-20px, -20px)' }} />
-          <div className="particle-split absolute w-4 h-4 rounded-full bg-royal blur-[2px]" style={{ transform: 'translate(20px, 20px)' }} />
-          <div className="particle-split absolute w-4 h-4 rounded-full bg-electric blur-[2px]" style={{ transform: 'translate(-20px, 20px)' }} />
-          <div className="particle-split absolute w-4 h-4 rounded-full bg-royal blur-[2px]" style={{ transform: 'translate(20px, -20px)' }} />
-          <div className="particle-core relative z-10 w-3 h-3 rounded-full bg-[#00E5FF] shadow-[0_0_20px_#00E5FF]" />
-        </div>
+      {/* Cinematic Vignette & Core Glow */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80vw] h-[80vw] md:w-[600px] md:h-[600px] bg-royal/10 blur-[120px] rounded-full pointer-events-none" />
+      <div className="absolute inset-0 pointer-events-none shadow-[inset_0_0_100px_rgba(0,0,0,0.8)]" />
 
-        {/* The assembled logo */}
-        <div className="loader-logo opacity-0 absolute inset-0 flex flex-col items-center justify-center">
-          <div className="animate-glow-pulse mb-6">
-            <LogoMark size={72} />
-          </div>
-          <p className="loader-text font-heading text-lg tracking-[0.25em] text-softwhite uppercase mt-4">
-            Luexe Digital
-          </p>
+      {/* Header */}
+      <div className="w-full flex justify-between items-center opacity-40 text-[10px] md:text-xs font-body tracking-[0.3em] uppercase text-softwhite z-10">
+        <span>Luexe Digital</span>
+        <span>Premium Web Experience</span>
+      </div>
+
+      {/* Main Percentage Counter */}
+      <div className="flex-1 flex flex-col items-center justify-center w-full z-10">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
+          className="relative"
+        >
+          <h1 className="text-[20vw] md:text-[14vw] font-heading font-bold text-softwhite tracking-tighter leading-none">
+            {progress}
+          </h1>
+          <span className="absolute top-4 -right-8 md:-right-12 text-xl md:text-4xl text-electric font-heading font-bold">
+            %
+          </span>
+        </motion.div>
+      </div>
+
+      {/* Footer / Progress Bar */}
+      <div className="w-full max-w-lg flex flex-col gap-6 z-10">
+        <div className="flex justify-between text-[10px] md:text-xs tracking-[0.2em] text-smoke/50 uppercase">
+          <span>Loading Environment</span>
+          <span>{progress === 100 ? "Ready" : "Initializing"}</span>
+        </div>
+        
+        {/* Sleek track */}
+        <div className="h-[2px] w-full bg-white/5 overflow-hidden rounded-full relative">
+          <motion.div 
+            className="absolute top-0 left-0 bottom-0 bg-gradient-to-r from-royal to-electric"
+            style={{ width: `${progress}%` }}
+            layout
+          />
+          
+          {/* Scanning light flare effect over the bar */}
+          <motion.div
+            className="absolute top-0 bottom-0 w-20 bg-white/50 blur-md"
+            animate={{ 
+              x: ["-100%", "500%"]
+            }}
+            transition={{
+              duration: 2,
+              repeat: Infinity,
+              ease: "linear"
+            }}
+          />
         </div>
       </div>
     </motion.div>
