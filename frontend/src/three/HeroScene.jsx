@@ -68,8 +68,8 @@ function LogoMark3D({ pointer }) {
 
   const uniforms = useMemo(() => ({
     uProgress: { value: 0 },
-    uSize: { value: 40.0 * (window.devicePixelRatio || 1) },
-    uOpacity: { value: 1 }, // Start at 1 so they are immediately ready
+    uSize: { value: 12.0 * (window.devicePixelRatio || 1) },
+    uOpacity: { value: 1 },
   }), []);
 
   useEffect(() => {
@@ -164,7 +164,6 @@ function LogoMark3D({ pointer }) {
               `}
               transparent
               depthWrite={false}
-              blending={THREE.AdditiveBlending}
             />
           </points>
         )}
