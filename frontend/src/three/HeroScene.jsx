@@ -81,7 +81,7 @@ function LogoMark3D({ pointer }) {
         scrollTrigger: {
           trigger: "#top",
           start: "0% top",
-          end: "5% top",
+          end: "10% top",
           scrub: true,
         }
       });
@@ -92,7 +92,7 @@ function LogoMark3D({ pointer }) {
         scrollTrigger: {
           trigger: "#top",
           start: "0% top",
-          end: "5% top",
+          end: "10% top",
           scrub: true,
         }
       });
@@ -103,8 +103,8 @@ function LogoMark3D({ pointer }) {
         ease: "power2.inOut",
         scrollTrigger: {
           trigger: "#top",
-          start: "5% top",
-          end: "80% top",
+          start: "10% top",
+          end: "90% top",
           scrub: 1.2,
         }
       });
@@ -169,7 +169,8 @@ function LogoMark3D({ pointer }) {
                   vec2 xy = gl_PointCoord.xy - vec2(0.5);
                   if(length(xy) > 0.5) discard;
                   
-                  float alpha = uOpacity * (1.0 - (uProgress * uProgress));
+                  // Keep particles visible longer before fading out
+                  float alpha = uOpacity * (1.0 - pow(uProgress, 4.0));
                   gl_FragColor = vec4(vColor, alpha);
                 }
               `}
