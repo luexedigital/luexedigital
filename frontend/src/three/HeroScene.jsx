@@ -28,33 +28,17 @@ function LogoMark3D({ pointer }) {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // Slightly fade the logo as you scroll down so text below is readable
+      // Fade out the logo quickly to simulate it dissolving into particles
       gsap.to(matRef.current, {
-        opacity: 0.03,
+        opacity: 0,
         ease: "power1.inOut",
         scrollTrigger: {
           trigger: "#top",
           start: "0% top",
-          end: "100% top",
+          end: "40% top",
           scrub: true,
         }
       });
-
-      // Blast (scale) the logo
-      if (ref.current) {
-        gsap.to(ref.current.scale, {
-          x: 12,
-          y: 12,
-          z: 12,
-          ease: "power2.in",
-          scrollTrigger: {
-            trigger: "#top",
-            start: "0% top",
-            end: "120% top",
-            scrub: 1.2,
-          }
-        });
-      }
     });
     return () => ctx.revert();
   }, []);
@@ -101,6 +85,27 @@ function Particles({ count, color, radius = 9, size = 0.025, speed = 0.0004 }) {
     }
     return arr;
   }, [count, radius]);
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      if (ref.current) {
+        // Blast particles outward by scaling the group
+        gsap.to(ref.current.scale, {
+          x: 4.5,
+          y: 4.5,
+          z: 4.5,
+          ease: "power2.in",
+          scrollTrigger: {
+            trigger: "#top",
+            start: "0% top",
+            end: "120% top",
+            scrub: 1.2,
+          }
+        });
+      }
+    });
+    return () => ctx.revert();
+  }, []);
 
   useFrame(() => {
     if (ref.current) ref.current.rotation.y += speed;
