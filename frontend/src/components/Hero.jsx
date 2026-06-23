@@ -19,19 +19,12 @@ export default function Hero({ perf, started }) {
       className="relative flex min-h-screen items-center overflow-hidden"
     >
       {/* base gradient backdrop (paints instantly, helps perceived FCP) */}
-      <div className="absolute inset-0 -z-10 bg-midnight">
+      <div className="absolute inset-0 -z-10">
         <div className="absolute left-1/2 top-1/3 h-[800px] w-[800px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle_at_center,rgba(124,58,237,0.15)_0%,transparent_60%)]" />
         <div className="absolute right-0 top-1/2 h-[600px] w-[600px] translate-x-1/4 -translate-y-1/2 rounded-full bg-[radial-gradient(circle_at_center,rgba(0,229,255,0.1)_0%,transparent_60%)]" />
       </div>
 
-      {/* 3D canvas (lazy) */}
-      {showCanvas && (
-        <div className="fixed inset-0 z-0 pointer-events-none">
-          <Suspense fallback={null}>
-            <HeroScene config={perf.scene} />
-          </Suspense>
-        </div>
-      )}
+      {/* 3D canvas moved to App.js to ensure it acts as a global background */}
 
       {/* reduced-motion static centerpiece */}
       {reduce && (

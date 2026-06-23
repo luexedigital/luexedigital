@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Suspense, lazy } from "react";
 import { AnimatePresence } from "framer-motion";
 import "@/App.css";
 import { usePerformanceTier } from "@/hooks/usePerformanceTier";
@@ -26,6 +26,8 @@ import MobileCTA from "@/components/MobileCTA";
 import ExitIntentPopup from "@/components/ExitIntentPopup";
 import ServicesTicker from "@/components/ServicesTicker";
 
+const HeroScene = lazy(() => import("@/three/HeroScene"));
+
 export default function App() {
   const perf = usePerformanceTier();
   const [loaded, setLoaded] = useState(false);
@@ -45,6 +47,15 @@ export default function App() {
 
       <Cursor disabled={perf.tier === "low" || perf.reducedMotion} />
       <LaserScroll />
+
+      {/* GLOBAL 3D CANVAS BACKGROUND */}
+      {loaded && !perf.reducedMotion && (
+        <div className="fixed inset-0 z-0 pointer-events-none">
+          <Suspense fallback={null}>
+            <HeroScene config={perf.scene} />
+          </Suspense>
+        </div>
+      )}
 
       <AnimatePresence mode="wait">
         {!loaded ? (
