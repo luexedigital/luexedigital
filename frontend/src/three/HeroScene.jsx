@@ -236,30 +236,18 @@ function Lights() {
 
 export default function HeroScene({ config }) {
   const pointer = useRef({ x: 0, y: 0 });
-  const [inView, setInView] = React.useState(true);
 
   useEffect(() => {
     const onMove = (e) => {
       pointer.current.x = (e.clientX / window.innerWidth) * 2 - 1;
       pointer.current.y = -((e.clientY / window.innerHeight) * 2 - 1);
     };
-    
-    // Pause rendering entirely if user scrolls past Hero section (saves massive laptop battery and eliminates lag)
-    const onScroll = () => {
-      if (window.scrollY > window.innerHeight * 1.2) {
-        if (inView) setInView(false);
-      } else {
-        if (!inView) setInView(true);
-      }
-    };
 
     window.addEventListener("pointermove", onMove, { passive: true });
-    window.addEventListener("scroll", onScroll, { passive: true });
     return () => {
       window.removeEventListener("pointermove", onMove);
-      window.removeEventListener("scroll", onScroll);
     };
-  }, [inView]);
+  }, []);
 
   return (
     <Canvas
@@ -270,8 +258,8 @@ export default function HeroScene({ config }) {
         alpha: true,
         powerPreference: "high-performance",
         stencil: false,
+        preserveDrawingBuffer: true,
       }}
-      frameloop={inView ? "always" : "never"}
       style={{ pointerEvents: "none" }}
     >
       <Lights />
