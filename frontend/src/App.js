@@ -24,14 +24,7 @@ import ScrollProgress from "@/components/ScrollProgress";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import MobileCTA from "@/components/MobileCTA";
 import ExitIntentPopup from "@/components/ExitIntentPopup";
-
-const RESULTS_TEXT = [
-  "₹12.4M+ Revenue Generated",
-  "14,500+ Leads Delivered",
-  "220% Avg Conversion Lift",
-  "40% Reduction in CPL",
-  "5.4x Average ROAS",
-];
+import ServicesTicker from "@/components/ServicesTicker";
 
 export default function App() {
   const perf = usePerformanceTier();
@@ -62,14 +55,7 @@ export default function App() {
             <main>
               <Hero perf={perf} started={loaded} />
               
-              {/* Results Ticker */}
-              <Marquee 
-                items={RESULTS_TEXT} 
-                duration={50} 
-                className="border-y border-white/5 bg-[#030303] py-3"
-                itemClassName="font-heading text-xs md:text-sm font-bold tracking-widest text-electric uppercase"
-                separator={<span className="text-royal font-bold">•</span>}
-              />
+              <ServicesTicker />
               
               <Stats />
               <div className="h-24 w-full bg-gradient-to-b from-transparent via-black/40 to-transparent pointer-events-none" />
