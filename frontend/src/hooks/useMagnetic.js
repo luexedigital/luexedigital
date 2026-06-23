@@ -2,9 +2,9 @@ import { useEffect, useRef } from "react";
 
 /**
  * Magnetic hover effect. Returns a ref to attach to the element that should
- * drift toward the cursor. Automatically disabled on touch / coarse pointers.
+ * drift toward the cursor when within a certain radius.
  */
-export function useMagnetic(strength = 0.35) {
+export function useMagnetic(strength = 0.35, pullRadius = 80, maxMove = 12) {
   const ref = useRef(null);
 
   useEffect(() => {
@@ -14,21 +14,38 @@ export function useMagnetic(strength = 0.35) {
 
     const onMove = (e) => {
       const rect = el.getBoundingClientRect();
-      const x = e.clientX - (rect.left + rect.width / 2);
-      const y = e.clientY - (rect.top + rect.height / 2);
-      el.style.transform = `translate(${x * strength}px, ${y * strength}px)`;
-    };
-    const onLeave = () => {
-      el.style.transform = "translate(0px, 0px)";
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+      
+      const distanceX = e.clientX - centerX;
+      const distanceY = e.clientY - centerY;
+      
+      // Calculate straight-line distance to cursor
+      const distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
+
+      if (distance < pullRadius) {
+        // Calculate raw movement
+        let moveX = distanceX * strength;
+        let moveY = distanceY * strength;
+        
+        // Clamp movement to maxMove
+        const moveDist = Math.sqrt(moveX * moveX + moveY * moveY);
+        if (moveDist > maxMove) {
+          moveX = (moveX / moveDist) * maxMove;
+          moveY = (moveY / moveDist) * maxMove;
+        }
+        
+        el.style.transform = `translate(${moveX}px, ${moveY}px)`;
+      } else {
+        el.style.transform = "translate(0px, 0px)";
+      }
     };
 
-    el.addEventListener("mousemove", onMove);
-    el.addEventListener("mouseleave", onLeave);
+    window.addEventListener("mousemove", onMove);
     return () => {
-      el.removeEventListener("mousemove", onMove);
-      el.removeEventListener("mouseleave", onLeave);
+      window.removeEventListener("mousemove", onMove);
     };
-  }, [strength]);
+  }, [strength, pullRadius, maxMove]);
 
   return ref;
 }

@@ -1,5 +1,5 @@
 import React, { useRef, useEffect } from "react";
-import { ArrowUpRight, MessageCircle } from "lucide-react";
+import { ArrowUpRight, ArrowRight } from "lucide-react";
 import { useInView } from "framer-motion";
 import { Reveal } from "@/components/Reveal";
 import TextReveal from "@/components/TextReveal";
@@ -7,6 +7,7 @@ import MagneticButton from "@/components/MagneticButton";
 
 export default function FinalCTA() {
   const ref = useRef(null);
+  const [submitted, setSubmitted] = useState(false);
   const inView = useInView(ref, { margin: "-20% 0px -20% 0px", once: false });
 
   useEffect(() => {
@@ -64,28 +65,47 @@ export default function FinalCTA() {
         </Reveal>
 
         <Reveal delay={0.2}>
-          <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row sm:gap-8 font-body text-sm text-smoke">
-            <p>
-              Email us directly at{" "}
-              <a
-                href="mailto:hello@luexedigital.com"
-                data-testid="contact-email-link"
-                className="text-electric underline-offset-4 hover:underline"
+          <div className="mx-auto mt-16 max-w-xl text-left">
+            {!submitted ? (
+              <form
+                action="https://formspree.io/f/placeholder" // Replace with real Formspree endpoint
+                method="POST"
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  setSubmitted(true);
+                  // In a real implementation, you would use fetch() here
+                  // to submit to Formspree, then setSubmitted(true).
+                }}
+                className="card-luxe glass-strong p-8 flex flex-col gap-5 rounded-2xl"
               >
-                hello@luexedigital.com
-              </a>
-            </p>
-            <p className="flex items-center gap-2">
-              <MessageCircle className="h-4 w-4 text-electric" /> WhatsApp us at{" "}
-              <a
-                href="https://wa.me/96512345678"
-                target="_blank"
-                rel="noreferrer"
-                className="text-electric underline-offset-4 hover:underline"
-              >
-                +965 1234 5678
-              </a>
-            </p>
+                <div>
+                  <label htmlFor="name" className="block font-body text-xs uppercase tracking-wider text-smoke mb-2">Full Name</label>
+                  <input required type="text" id="name" name="name" className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-electric transition-colors" placeholder="John Doe" />
+                </div>
+                <div>
+                  <label htmlFor="business" className="block font-body text-xs uppercase tracking-wider text-smoke mb-2">Business Name</label>
+                  <input required type="text" id="business" name="business" className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-electric transition-colors" placeholder="Acme Corp" />
+                </div>
+                <div>
+                  <label htmlFor="need" className="block font-body text-xs uppercase tracking-wider text-smoke mb-2">What do you need?</label>
+                  <select required id="need" name="need" className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-electric transition-colors appearance-none">
+                    <option value="" disabled selected className="text-black">Select an option</option>
+                    <option value="Performance Marketing" className="text-black">Performance Marketing</option>
+                    <option value="Website Development" className="text-black">Website Development</option>
+                    <option value="Both" className="text-black">Both</option>
+                    <option value="Not Sure" className="text-black">Not Sure</option>
+                  </select>
+                </div>
+                <button type="submit" className="mt-4 flex w-full items-center justify-center gap-2 rounded-xl bg-white text-midnight font-bold py-4 transition-transform hover:scale-[1.02]">
+                  Send Message <ArrowRight className="h-5 w-5" />
+                </button>
+              </form>
+            ) : (
+              <div className="card-luxe glass-strong p-8 text-center rounded-2xl border-electric/50">
+                <h3 className="font-heading text-2xl font-bold text-white mb-2">Message Sent</h3>
+                <p className="font-body text-smoke">We'll be in touch within 24 hours.</p>
+              </div>
+            )}
           </div>
         </Reveal>
       </div>

@@ -24,10 +24,18 @@ function CountUp({ target, prefix = "", suffix = "", inView }) {
   }, [inView, target]);
 
   if (typeof target !== "number") {
-    return <span>{prefix}{target}{suffix}</span>;
+    return (
+      <motion.span
+        initial={{ opacity: 0, scale: 0.8 }}
+        animate={inView ? { opacity: 1, scale: 1 } : {}}
+        transition={{ duration: 1, delay: 0.5, ease: "easeOut" }}
+      >
+        {prefix}{target}{suffix}
+      </motion.span>
+    );
   }
 
-  const display = isInt ? Math.round(val) : val.toFixed(1);
+  const display = isInt ? Math.round(val).toLocaleString() : val.toFixed(1);
   return (
     <span>
       {prefix}
@@ -38,9 +46,9 @@ function CountUp({ target, prefix = "", suffix = "", inView }) {
 }
 
 const METRICS = [
-  { value: 100, suffix: "+", label: "High-Converting Pages Built", sub: "Engineered for maximum ROI" },
-  { value: 10, suffix: ",000+", label: "Leads Generated", sub: "Driving real business growth" },
-  { value: "100%", label: "Performance-Driven", sub: "Every decision backed by data" },
+  { value: 100, suffix: "+", label: "Pages Built", sub: "Engineered for maximum ROI" },
+  { value: 10000, suffix: "+", label: "Leads Delivered", sub: "Driving real business growth" },
+  { value: 100, suffix: "%", label: "Performance-Driven", sub: "Every decision backed by data" },
   { value: "GCC", label: "Market Expertise", sub: "Deep understanding of local behavior" },
 ];
 

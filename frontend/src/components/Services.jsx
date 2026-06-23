@@ -93,11 +93,11 @@ function TiltCard({ service, index }) {
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
         style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
-        whileHover={{ y: -10, scale: 1.02 }}
+        whileHover={{ y: -5, scale: 1.01 }}
         transition={{ duration: 0.3, ease: "easeOut" }}
-        className="card-luxe group h-full p-7 md:p-8 relative bg-graphite/40 border border-white/10 overflow-hidden"
+        className={`card-luxe group h-full p-7 md:p-8 relative bg-graphite/40 border border-white/10 overflow-hidden hover:border-electric transition-colors duration-300 ${glow}`}
       >
-        <div className={`mb-6 inline-flex h-14 w-14 items-center justify-center rounded-2xl border border-white/20 bg-white/[0.05] transition-all duration-500 ${glow}`}>
+        <div className="mb-6 inline-flex h-14 w-14 items-center justify-center rounded-2xl border border-white/20 bg-white/[0.05] transition-transform duration-300 group-hover:scale-110 group-hover:rotate-[6deg]">
           <AnimatedIcon title={service.title} />
         </div>
         <h3 className="font-heading text-xl font-semibold tracking-tight text-softwhite md:text-2xl" style={{ transform: "translateZ(30px)" }}>

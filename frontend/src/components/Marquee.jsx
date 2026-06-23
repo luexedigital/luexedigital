@@ -1,7 +1,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 
-const MARQUEE_TEXT = [
+const DEFAULT_TEXT = [
   "WEBSITE DEVELOPMENT",
   "PERFORMANCE MARKETING",
   "LEAD GENERATION",
@@ -9,12 +9,18 @@ const MARQUEE_TEXT = [
   "SEO",
 ];
 
-export default function Marquee() {
-  // We duplicate the array to ensure seamless infinite looping
-  const duplicatedText = [...MARQUEE_TEXT, ...MARQUEE_TEXT, ...MARQUEE_TEXT, ...MARQUEE_TEXT];
+export default function Marquee({
+  items = DEFAULT_TEXT,
+  duration = 30,
+  className = "border-y border-white/5 bg-midnight/50 py-4 md:py-6 backdrop-blur-md",
+  itemClassName = "font-heading text-sm md:text-base font-bold tracking-[0.2em] text-smoke/50 uppercase",
+  separator = <span className="h-1.5 w-1.5 rounded-full bg-electric/40" />,
+  renderItem = null,
+}) {
+  const duplicatedText = [...items, ...items, ...items, ...items];
 
   return (
-    <section className="relative w-full overflow-hidden border-y border-white/5 bg-midnight/50 py-4 md:py-6 backdrop-blur-md">
+    <section className={`relative w-full overflow-hidden ${className}`}>
       <div className="absolute inset-0 z-10 pointer-events-none marquee-mask" />
       
       <div className="flex whitespace-nowrap">
@@ -22,17 +28,19 @@ export default function Marquee() {
           className="flex items-center gap-12 px-6"
           animate={{ x: "-50%" }}
           transition={{
-            duration: 30,
+            duration: duration,
             ease: "linear",
             repeat: Infinity,
           }}
         >
-          {duplicatedText.map((text, i) => (
+          {duplicatedText.map((item, i) => (
             <div key={i} className="flex items-center gap-12">
-              <span className="font-heading text-sm md:text-base font-bold tracking-[0.2em] text-smoke/50 uppercase">
-                {text}
-              </span>
-              <span className="h-1.5 w-1.5 rounded-full bg-electric/40" />
+              {renderItem ? renderItem(item, i) : (
+                <span className={itemClassName}>
+                  {item}
+                </span>
+              )}
+              {separator && separator}
             </div>
           ))}
         </motion.div>
