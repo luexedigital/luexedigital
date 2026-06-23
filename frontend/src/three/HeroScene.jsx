@@ -73,15 +73,16 @@ function LogoMark3D({ pointer }) {
   }), []);
 
   useEffect(() => {
+    // We use document.body to avoid race conditions with #top mounting after Loader exits
     const ctx = gsap.context(() => {
       // 1. Instantly cross-fade the solid logo to a very dim state, so it acts as a watermark
       gsap.to(matRef.current, {
-        opacity: 0.06,
+        opacity: 0.25,
         ease: "none",
         scrollTrigger: {
-          trigger: "#top",
-          start: "0% top",
-          end: "10% top",
+          trigger: document.body,
+          start: "top top",
+          end: "+=300", // over the first 300px of scroll
           scrub: true,
         }
       });
@@ -90,9 +91,9 @@ function LogoMark3D({ pointer }) {
         value: 1,
         ease: "none",
         scrollTrigger: {
-          trigger: "#top",
-          start: "0% top",
-          end: "10% top",
+          trigger: document.body,
+          start: "top top",
+          end: "+=300",
           scrub: true,
         }
       });
@@ -102,9 +103,9 @@ function LogoMark3D({ pointer }) {
         value: 1,
         ease: "power2.inOut",
         scrollTrigger: {
-          trigger: "#top",
-          start: "10% top",
-          end: "90% top",
+          trigger: document.body,
+          start: "+=300", // start blasting after 300px
+          end: "+=1000",  // spread blast over 1000px of scroll
           scrub: 1.2,
         }
       });
@@ -169,8 +170,8 @@ function LogoMark3D({ pointer }) {
                   vec2 xy = gl_PointCoord.xy - vec2(0.5);
                   if(length(xy) > 0.5) discard;
                   
-                  // Keep particles visible longer before fading out
-                  float alpha = uOpacity * (1.0 - pow(uProgress, 4.0));
+                  // Keep particles visible longer before fading out, and never go fully invisible
+                  float alpha = uOpacity * max(0.12, (1.0 - pow(uProgress, 4.0)));
                   gl_FragColor = vec4(vColor, alpha);
                 }
               `}

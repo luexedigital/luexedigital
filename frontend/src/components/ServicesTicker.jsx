@@ -18,7 +18,7 @@ const ROW_ITEMS = [...SERVICES, ...SERVICES, ...SERVICES, ...SERVICES];
 
 export default function ServicesTicker() {
   return (
-    <section className="relative w-full overflow-hidden border-y border-transparent py-6 group bg-gradient-to-b from-[#020515] to-black">
+    <section className="relative w-full overflow-hidden border-y border-transparent py-6 group">
       {/* 1px Gradient Borders (simulated via absolute positioning) */}
       <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-electric via-royal to-electric opacity-60" />
       <div className="absolute bottom-0 left-0 right-0 h-[1px] bg-gradient-to-r from-royal via-electric to-royal opacity-60" />
