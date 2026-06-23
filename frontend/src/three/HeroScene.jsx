@@ -30,15 +30,31 @@ function LogoMark3D({ pointer }) {
     const ctx = gsap.context(() => {
       // Slightly fade the logo as you scroll down so text below is readable
       gsap.to(matRef.current, {
-        opacity: 0.15,
-        ease: "none",
+        opacity: 0.03,
+        ease: "power1.inOut",
         scrollTrigger: {
           trigger: "#top",
-          start: "10% top",
+          start: "0% top",
           end: "100% top",
           scrub: true,
         }
       });
+
+      // Blast (scale) the logo
+      if (ref.current) {
+        gsap.to(ref.current.scale, {
+          x: 12,
+          y: 12,
+          z: 12,
+          ease: "power2.in",
+          scrollTrigger: {
+            trigger: "#top",
+            start: "0% top",
+            end: "120% top",
+            scrub: 1.2,
+          }
+        });
+      }
     });
     return () => ctx.revert();
   }, []);

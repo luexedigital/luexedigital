@@ -148,11 +148,11 @@
 }
 
 .animate-marquee-left {
-    animation: marquee-left 40s linear infinite;
+    animation: marquee-left 70s linear infinite;
 }
 
 .animate-marquee-right {
-    animation: marquee-right 40s linear infinite;
+    animation: marquee-right 70s linear infinite;
 }
 
 /* Custom cursor */
