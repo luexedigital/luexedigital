@@ -356,6 +356,24 @@ function SceneController() {
 // ----------------------------------------------------------------------------
 export default function GlobalSceneManager({ config }) {
   const pointer = useRef({ x: 0, y: 0 });
+  const wrapperRef = useRef();
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      if (wrapperRef.current) {
+        gsap.to(wrapperRef.current, {
+          opacity: 0,
+          scrollTrigger: {
+            trigger: "#process",
+            start: "top center",
+            end: "bottom center",
+            scrub: true,
+          }
+        });
+      }
+    });
+    return () => ctx.revert();
+  }, []);
 
   useEffect(() => {
     const onMove = (e) => {
@@ -367,7 +385,7 @@ export default function GlobalSceneManager({ config }) {
   }, []);
 
   return (
-    <div className="fixed inset-0 z-0 pointer-events-none">
+    <div ref={wrapperRef} className="fixed inset-0 z-0 pointer-events-none transition-opacity">
       <Canvas
         camera={{ position: [0, 0, 8], fov: 45 }}
         gl={{

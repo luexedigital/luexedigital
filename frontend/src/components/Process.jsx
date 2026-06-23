@@ -11,9 +11,9 @@ function ProcessStep({ p, index, isLeft }) {
   return (
     <div
       ref={ref}
-      className={`relative flex items-start gap-6 md:w-1/2 md:gap-0 ${
+      className={`relative flex items-start gap-6 mb-12 md:mb-8 md:w-1/2 md:gap-0 ${
         isLeft ? "md:self-start md:pr-12" : "md:flex-row-reverse md:self-end md:pl-12"
-      } md:my-8`}
+      }`}
     >
       {/* node */}
       <div

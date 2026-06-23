@@ -101,7 +101,7 @@ export const CASE_STUDIES = [
     sector: "Tech · GCC",
     result: "Complete Re-platforming",
     desc: "A cinematic brand refresh and conversion-first booking experience that reduced dependence on third-party platforms.",
-    image: "https://images.pexels.com/photos/1714341/pexels-photo-1714341.jpeg",
+    image: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&q=80&w=1000",
     metrics: [
       { k: "Conversion Increase", v: "+220%" },
       { k: "Load Time", v: "-40%" },
@@ -112,7 +112,7 @@ export const CASE_STUDIES = [
     sector: "Real Estate · Kuwait",
     result: "Hyper-Targeted Acquisition",
     desc: "Full-funnel performance marketing that turned browsers into a loyal, repeat customer base.",
-    image: "https://images.pexels.com/photos/27141316/pexels-photo-27141316.jpeg",
+    image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=1000",
     metrics: [
       { k: "Leads Generated", v: "14,500+" },
       { k: "CPL", v: "-46%" },
@@ -123,7 +123,7 @@ export const CASE_STUDIES = [
     sector: "E-Commerce · Global",
     result: "Market Expansion",
     desc: "Identity systems, art direction and motion that make ambitious brands impossible to ignore.",
-    image: "https://images.pexels.com/photos/8068660/pexels-photo-8068660.jpeg",
+    image: "https://images.unsplash.com/photo-1600607686527-6fb886090705?auto=format&fit=crop&q=80&w=1000",
     metrics: [
       { k: "Engagement Growth", v: "5.4x" },
       { k: "Revenue", v: "+US$3.1M" },
@@ -189,5 +189,6 @@ export const NAV_LINKS = [
   { label: "Services", href: "#services" },
   { label: "Process", href: "#process" },
   { label: "Work", href: "#work" },
-  { label: "Why Us", href: "#why-us" },
+  { label: "Our Edge", href: "#why-us" },
+  { label: "Contact", href: "#contact" },
 ];

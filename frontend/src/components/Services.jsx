@@ -143,7 +143,7 @@ export default function Services() {
           </Reveal>
         </div>
 
-        <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-6">
+        <div className="grid grid-cols-1 gap-8 md:gap-6 md:grid-cols-2 lg:grid-cols-6">
           {SERVICES.map((s, i) => (
             <TiltCard key={s.title} service={s} index={i} />
           ))}

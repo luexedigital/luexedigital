@@ -2,8 +2,8 @@ import React from 'react';
 import { Helmet } from 'react-helmet-async';
 
 export default function SEO() {
-  const title = "Luexe Digital | Elite Performance Marketing & Web Development";
-  const description = "Luexe Digital is an elite agency helping ambitious brands across Kuwait and the GCC grow through high-converting websites, lead generation, branding and data-driven marketing.";
+  const title = "Luexe Digital — Performance Marketing & Web Development Agency | Kuwait & GCC";
+  const description = "Luexe Digital builds high-converting websites and runs ROAS-focused ad campaigns for ambitious brands across Kuwait and the GCC.";
   const url = "https://luexedigital.com";
 
   // Structured Data (JSON-LD)

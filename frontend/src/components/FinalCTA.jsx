@@ -1,5 +1,5 @@
 import React, { useRef, useEffect } from "react";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, MessageCircle } from "lucide-react";
 import { useInView } from "framer-motion";
 import { Reveal } from "@/components/Reveal";
 import TextReveal from "@/components/TextReveal";
@@ -50,7 +50,7 @@ export default function FinalCTA() {
         <Reveal delay={0.15}>
           <div className="mt-12 flex flex-wrap items-center justify-center gap-4">
             <MagneticButton
-              href="mailto:luexedigital@gmail.com?subject=Free%20Growth%20Consultation"
+              href="mailto:hello@luexedigital.com?subject=Free%20Growth%20Consultation"
               testid="final-primary-cta"
             >
               <span className="relative z-10 flex items-center gap-2 px-4 py-2 text-lg">
@@ -64,16 +64,29 @@ export default function FinalCTA() {
         </Reveal>
 
         <Reveal delay={0.2}>
-          <p className="mt-8 font-body text-sm text-smoke">
-            Or email us directly at{" "}
-            <a
-              href="mailto:luexedigital@gmail.com"
-              data-testid="contact-email-link"
-              className="text-electric underline-offset-4 hover:underline"
-            >
-              luexedigital@gmail.com
-            </a>
-          </p>
+          <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row sm:gap-8 font-body text-sm text-smoke">
+            <p>
+              Email us directly at{" "}
+              <a
+                href="mailto:hello@luexedigital.com"
+                data-testid="contact-email-link"
+                className="text-electric underline-offset-4 hover:underline"
+              >
+                hello@luexedigital.com
+              </a>
+            </p>
+            <p className="flex items-center gap-2">
+              <MessageCircle className="h-4 w-4 text-electric" /> WhatsApp us at{" "}
+              <a
+                href="https://wa.me/96512345678"
+                target="_blank"
+                rel="noreferrer"
+                className="text-electric underline-offset-4 hover:underline"
+              >
+                +965 1234 5678
+              </a>
+            </p>
+          </div>
         </Reveal>
       </div>
     </section>

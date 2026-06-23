@@ -53,7 +53,7 @@ export default function Navbar() {
           <MagneticButton
             href="#contact"
             testid="nav-cta-button"
-            className="!px-6 !py-3 text-xs"
+            className="!px-6 !py-3 text-xs animate-cyan-pulse"
           >
             Book a Call <ArrowUpRight className="h-4 w-4" />
           </MagneticButton>
@@ -94,9 +94,9 @@ export default function Navbar() {
                 href="#contact"
                 onClick={() => setOpen(false)}
                 data-testid="mobile-cta-button"
-                className="mt-2 inline-flex items-center justify-center gap-2 rounded-full bg-softwhite px-6 py-3.5 text-sm font-semibold text-midnight"
+                className="mt-4 inline-flex items-center justify-center gap-2 rounded-full bg-softwhite px-6 py-4 text-base font-semibold text-midnight animate-cyan-pulse"
               >
-                Book a Free Consultation <ArrowUpRight className="h-4 w-4" />
+                Book a Call <ArrowUpRight className="h-4 w-4" />
               </a>
             </div>
           </motion.div>

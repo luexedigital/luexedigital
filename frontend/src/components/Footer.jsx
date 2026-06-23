@@ -77,13 +77,15 @@ export default function Footer() {
           </p>
           <div className="flex items-center gap-3">
             {[
-              { icon: Instagram, label: "instagram" },
-              { icon: Linkedin, label: "linkedin" },
-              { icon: Twitter, label: "twitter" },
-            ].map(({ icon: Icon, label }) => (
+              { icon: Instagram, label: "instagram", href: "https://instagram.com/luexedigital" },
+              { icon: Linkedin, label: "linkedin", href: "https://linkedin.com/company/luexedigital" },
+              { icon: Twitter, label: "twitter", href: "https://twitter.com/luexedigital" },
+            ].map(({ icon: Icon, label, href }) => (
               <a
                 key={label}
-                href="#top"
+                href={href}
+                target="_blank"
+                rel="noreferrer"
                 aria-label={label}
                 data-testid={`footer-social-${label}`}
                 className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 text-smoke transition-all duration-300 hover:border-electric/50 hover:text-electric"

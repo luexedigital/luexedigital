@@ -1,11 +1,12 @@
-import React, { useEffect, useCallback } from "react";
-import { Star, Quote, ChevronLeft, ChevronRight } from "lucide-react";
+import React, { useEffect, useCallback, useState } from "react";
+import { Star, Quote, ChevronLeft, ChevronRight, CheckCircle2 } from "lucide-react";
 import useEmblaCarousel from "embla-carousel-react";
 import { Reveal } from "@/components/Reveal";
 import { TESTIMONIALS } from "@/lib/data";
 
 export default function Testimonials() {
-  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true, align: "start" });
+  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true, align: "center" });
+  const [selectedIndex, setSelectedIndex] = useState(0);
 
   const scrollPrev = useCallback(() => {
     if (emblaApi) emblaApi.scrollPrev();
@@ -17,6 +18,11 @@ export default function Testimonials() {
 
   useEffect(() => {
     if (!emblaApi) return;
+    const onSelect = () => setSelectedIndex(emblaApi.selectedScrollSnap());
+    emblaApi.on("select", onSelect);
+    emblaApi.on("reInit", onSelect);
+    onSelect();
+
     const autoplay = setInterval(() => {
       emblaApi.scrollNext();
     }, 4000);
@@ -74,7 +80,7 @@ export default function Testimonials() {
                   key={i}
                   className="relative flex-[0_0_100%] sm:flex-[0_0_50%] lg:flex-[0_0_33.33%] min-w-0 pl-6"
                 >
-                  <div className="card-luxe glass-strong h-full flex flex-col p-8 md:p-10 transition-transform duration-500 hover:-translate-y-2">
+                  <div className={`card-luxe glass-strong h-full flex flex-col p-8 md:p-10 transition-all duration-500 hover:-translate-y-2 ${i === selectedIndex ? 'scale-105 border-electric/30 bg-white/[0.04]' : 'scale-95 opacity-50'} origin-center`}>
                     <Quote className="h-10 w-10 text-royal/60 mb-6" />
                     <p className="flex-1 font-body text-base md:text-lg leading-relaxed text-softwhite/90">
                       “{t.quote}”
@@ -87,11 +93,21 @@ export default function Testimonials() {
                         />
                       ))}
                     </div>
-                    <div className="mt-6 border-t border-white/10 pt-5">
-                      <p className="font-heading text-base font-semibold text-softwhite">
-                        {t.name}
-                      </p>
-                      <p className="font-body text-sm text-smoke mt-1">{t.role}</p>
+                    <div className="mt-6 flex items-center gap-4 border-t border-white/10 pt-5">
+                      <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-royal to-electric text-lg font-bold text-white">
+                        {t.name.split(' ').map(n => n[0]).join('')}
+                      </div>
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <p className="font-heading text-base font-semibold text-softwhite whitespace-nowrap">
+                            {t.name}
+                          </p>
+                          <span className="flex items-center gap-1 rounded-full bg-electric/10 px-2 py-0.5 text-[10px] font-medium text-electric whitespace-nowrap">
+                            <CheckCircle2 className="h-3 w-3" /> Verified
+                          </span>
+                        </div>
+                        <p className="font-body text-sm text-smoke mt-1">{t.role}</p>
+                      </div>
                     </div>
                   </div>
                 </div>
