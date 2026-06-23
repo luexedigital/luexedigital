@@ -74,9 +74,9 @@ function LogoMark3D({ pointer }) {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // 1. Instantly cross-fade the solid logo out and the particles in
+      // 1. Instantly cross-fade the solid logo to a very dim state, so it acts as a watermark
       gsap.to(matRef.current, {
-        opacity: 0,
+        opacity: 0.06,
         ease: "none",
         scrollTrigger: {
           trigger: "#top",
