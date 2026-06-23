@@ -75,7 +75,7 @@ export default function Testimonials() {
           
           <div className="overflow-hidden" ref={emblaRef}>
             <div className="flex">
-              {TESTIMONIALS.map((t, i) => (
+              {[...TESTIMONIALS, ...TESTIMONIALS, ...TESTIMONIALS].map((t, i) => (
                 <div
                   key={i}
                   className="relative flex-[0_0_100%] sm:flex-[0_0_50%] lg:flex-[0_0_33.33%] min-w-0 pl-6"
