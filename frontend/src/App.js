@@ -33,7 +33,7 @@ export default function App() {
   useLenis(perf.reducedMotion);
 
   return (
-    <div className="App bg-midnight font-body text-softwhite relative selection:bg-electric/30 selection:text-white overflow-hidden">
+    <div className="App bg-midnight font-body text-softwhite relative selection:bg-electric/30 selection:text-white overflow-clip">
       <SEO />
       <ScrollProgress />
       <WhatsAppButton />
