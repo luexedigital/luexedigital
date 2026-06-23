@@ -26,22 +26,91 @@ function LogoMark3D({ pointer }) {
   const h = 4.4;
   const w = h * aspect;
 
+  const { positions, colors, randoms } = useMemo(() => {
+    if (!tex || !tex.image) return { positions: new Float32Array(0), colors: new Float32Array(0), randoms: new Float32Array(0) };
+    const img = tex.image;
+    const canvas = document.createElement("canvas");
+    const maxDimension = 200; // Limits max particles to ~40k
+    const scale = maxDimension / Math.max(img.width, img.height);
+    canvas.width = Math.floor(img.width * scale);
+    canvas.height = Math.floor(img.height * scale);
+    const ctx = canvas.getContext("2d", { willReadFrequently: true });
+    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+    const data = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
+    
+    const pos = [];
+    const col = [];
+    const rnd = [];
+    
+    for (let y = 0; y < canvas.height; y++) {
+      for (let x = 0; x < canvas.width; x++) {
+        const i = (y * canvas.width + x) * 4;
+        const a = data[i + 3];
+        if (a > 100) {
+          const px = (x / canvas.width - 0.5) * w;
+          const py = -(y / canvas.height - 0.5) * h;
+          pos.push(px, py, 0);
+          col.push(data[i]/255, data[i+1]/255, data[i+2]/255);
+          
+          const rx = (Math.random() - 0.5) * 15;
+          const ry = (Math.random() - 0.5) * 15;
+          const rz = (Math.random() - 0.5) * 15;
+          rnd.push(rx, ry, rz);
+        }
+      }
+    }
+    return {
+      positions: new Float32Array(pos),
+      colors: new Float32Array(col),
+      randoms: new Float32Array(rnd)
+    };
+  }, [tex, w, h]);
+
+  const uniforms = useMemo(() => ({
+    uProgress: { value: 0 },
+    uSize: { value: 12.0 * (window.devicePixelRatio || 1) },
+    uOpacity: { value: 0 },
+  }), []);
+
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // Slightly fade the logo as you scroll down so text below is readable
+      // 1. Instantly cross-fade the solid logo out and the particles in
       gsap.to(matRef.current, {
-        opacity: 0.15,
+        opacity: 0,
         ease: "none",
         scrollTrigger: {
           trigger: "#top",
-          start: "10% top",
-          end: "100% top",
+          start: "0% top",
+          end: "5% top",
           scrub: true,
+        }
+      });
+      
+      gsap.to(uniforms.uOpacity, {
+        value: 1,
+        ease: "none",
+        scrollTrigger: {
+          trigger: "#top",
+          start: "0% top",
+          end: "5% top",
+          scrub: true,
+        }
+      });
+
+      // 2. Blast the particles
+      gsap.to(uniforms.uProgress, {
+        value: 1,
+        ease: "power2.inOut",
+        scrollTrigger: {
+          trigger: "#top",
+          start: "5% top",
+          end: "80% top",
+          scrub: 1.2,
         }
       });
     });
     return () => ctx.revert();
-  }, []);
+  }, [uniforms]);
 
   useFrame((state) => {
     const g = ref.current;
@@ -56,6 +125,7 @@ function LogoMark3D({ pointer }) {
   return (
     <Float speed={1.3} rotationIntensity={0.15} floatIntensity={0.6}>
       <group ref={ref}>
+        {/* Crisp solid logo for the initial state */}
         <mesh>
           <planeGeometry args={[w, h]} />
           <meshBasicMaterial
@@ -66,6 +136,49 @@ function LogoMark3D({ pointer }) {
             toneMapped={false}
           />
         </mesh>
+        
+        {/* The shatter particles */}
+        {positions.length > 0 && (
+          <points>
+            <bufferGeometry>
+              <bufferAttribute attach="attributes-position" args={[positions, 3]} />
+              <bufferAttribute attach="attributes-color" args={[colors, 3]} />
+              <bufferAttribute attach="attributes-random" args={[randoms, 3]} />
+            </bufferGeometry>
+            <shaderMaterial
+              uniforms={uniforms}
+              vertexShader={`
+                uniform float uProgress;
+                uniform float uSize;
+                attribute vec3 random;
+                attribute vec3 color;
+                varying vec3 vColor;
+                void main() {
+                  vColor = color;
+                  vec3 pos = position + random * uProgress;
+                  vec4 mvPosition = modelViewMatrix * vec4(pos, 1.0);
+                  gl_Position = projectionMatrix * mvPosition;
+                  gl_PointSize = uSize * (1.0 / -mvPosition.z);
+                }
+              `}
+              fragmentShader={`
+                uniform float uProgress;
+                uniform float uOpacity;
+                varying vec3 vColor;
+                void main() {
+                  vec2 xy = gl_PointCoord.xy - vec2(0.5);
+                  if(length(xy) > 0.5) discard;
+                  
+                  float alpha = uOpacity * (1.0 - (uProgress * uProgress));
+                  gl_FragColor = vec4(vColor, alpha);
+                }
+              `}
+              transparent
+              depthWrite={false}
+              // Not using AdditiveBlending here to prevent blinding brightness
+            />
+          </points>
+        )}
       </group>
     </Float>
   );
