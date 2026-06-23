@@ -68,8 +68,8 @@ function LogoMark3D({ pointer }) {
 
   const uniforms = useMemo(() => ({
     uProgress: { value: 0 },
-    uSize: { value: 5.0 * (window.devicePixelRatio || 1) },
-    uOpacity: { value: 0 },
+    uSize: { value: 40.0 * (window.devicePixelRatio || 1) },
+    uOpacity: { value: 1 }, // Start at 1 so they are immediately ready
   }), []);
 
   useEffect(() => {
@@ -86,19 +86,7 @@ function LogoMark3D({ pointer }) {
         }
       });
 
-      // 2. Fade in the particle mesh immediately
-      gsap.to(uniforms.uOpacity, {
-        value: 1,
-        ease: "none",
-        scrollTrigger: {
-          trigger: "#top",
-          start: "0% top",
-          end: "5% top",
-          scrub: true,
-        }
-      });
-
-      // 3. Blast the particles outward
+      // 2. Blast the particles outward
       gsap.to(uniforms.uProgress, {
         value: 1,
         ease: "power2.inOut",
